@@ -973,6 +973,7 @@ function AdminPL(){
 function AdminSuite(){
   const [unlocked,setUnlocked]=useState(false);
   const [pin,setPin]=useState('');
+  const [panel,setPanel]=useState('dashboard');
   if(!unlocked)return(
     <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'calc(100vh - 56px)',background:C.bg}}>
       <div style={{...card,maxWidth:320,width:'90%',textAlign:'center',padding:'36px 28px'}}>
@@ -984,7 +985,6 @@ function AdminSuite(){
       </div>
     </div>
   );
-  const [panel,setPanel]=useState('dashboard');
   const nav=[['dashboard','Dashboard'],['pl','P&L'],['leads','Leads'],['members','Members'],['coaches','Coaches'],['bookings','Bookings'],['challenges','Challenges'],['reviews','Reviews'],['marketing','Marketing'],['intelligence','Intelligence'],['ai','AI Console'],['settings','Settings']];
   const panels={dashboard:AdminDashboard,pl:AdminPL,leads:AdminLeads,members:AdminMembers,coaches:AdminCoaches,bookings:AdminBookings,challenges:AdminChallenges,reviews:AdminReviews,marketing:AdminMarketing,intelligence:AdminIntelligence,ai:AdminAIConsole,settings:AdminSettings};
   const Panel=panels[panel]||AdminDashboard;
