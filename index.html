@@ -248,8 +248,8 @@ function MembershipsPage({goTo}){
   const plans=[
     {name:'Student Monthly',price:799,per:'month',color:C.purple,includes:['Unlimited gym access','Free body assessment','Coach check-ins 2x/week','Class booking access','Student ID required']},
     {name:'Regular Monthly',price:999,per:'month',color:C.red,featured:true,includes:['Everything in Student','Priority class booking','Monthly progress report','Nutrition guidance','No student ID required']},
-    {name:'Annual Regular',price:8000,per:'year',color:C.gold,includes:['Everything in Regular','2x free body comp scans','Annual progress review','Save 3,988 vs monthly','Priority coach access']},
-    {name:'Annual Student',price:6000,per:'year',color:C.blue,includes:['Everything in Student','2x free body comp scans','Save 3,588 vs monthly','Annual review session','Valid student ID required']},
+    {name:'Annual Regular',price:8000,per:'year',color:C.gold,includes:['Everything in Regular','2x free body comp scans','Annual progress review','Save ₱3,988 vs monthly','Priority coach access']},
+    {name:'Annual Student',price:6000,per:'year',color:C.blue,includes:['Everything in Student','2x free body comp scans','Save ₱3,588 vs monthly','Annual review session','Valid student ID required']},
   ];
   return(
     <div style={sec}>
@@ -488,6 +488,8 @@ function JoinPage({goTo}){
   const [plan,setPlan]=useState('regular');
   const [pay,setPay]=useState('gcash');
   const steps=['Path','Plan','Add-ons','Info','Payment','Confirm'];
+  const PLAN_INFO={student:{label:'Student Monthly',price:799},regular:{label:'Regular Monthly',price:999},annual:{label:'Annual Regular',price:8000}};
+  const cp=PLAN_INFO[plan]||PLAN_INFO.regular;
   if(step>=6)return(
     <div style={{...sec,textAlign:'center',paddingTop:80}}>
       <div style={{fontSize:52,marginBottom:16}}>🎉</div>
@@ -516,7 +518,7 @@ function JoinPage({goTo}){
           <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>How would you like to start?</div>
           <R val="assessment" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Free Body Assessment</div><div style={{fontSize:12,color:C.text2}}>Full body comp scan + coach consult — no commitment</div></R>
           <R val="monthly" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Monthly Membership</div><div style={{fontSize:12,color:C.text2}}>Start training immediately with full gym access</div></R>
-          <R val="annual" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Annual Membership</div><div style={{fontSize:12,color:C.text2}}>Best value · Save 3,988 · Commit to your year</div></R>
+          <R val="annual" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Annual Membership</div><div style={{fontSize:12,color:C.text2}}>Best value · Save ₱3,988 · Commit to your year</div></R>
         </div>}
         {step===1&&<div>
           <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>Select your plan</div>
@@ -544,14 +546,14 @@ function JoinPage({goTo}){
             ))}
           </div>
           <div style={{background:C.elev,borderRadius:8,padding:'14px 18px'}}>
-            <div style={{display:'flex',justifyContent:'space-between',fontSize:13,color:C.text2,marginBottom:6}}><span>Regular Monthly Membership</span><span>₱999</span></div>
-            <div style={{display:'flex',justifyContent:'space-between',borderTop:`1px solid ${C.border}`,paddingTop:8,fontWeight:700}}><span>Total</span><span style={{color:C.red}}>₱999</span></div>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:13,color:C.text2,marginBottom:6}}><span>{cp.label}</span><span>₱{cp.price.toLocaleString()}</span></div>
+            <div style={{display:'flex',justifyContent:'space-between',borderTop:`1px solid ${C.border}`,paddingTop:8,fontWeight:700}}><span>Total</span><span style={{color:C.red}}>₱{cp.price.toLocaleString()}</span></div>
           </div>
         </div>}
         {step===5&&<div>
           <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>Review and confirm</div>
           <div style={{background:C.elev,borderRadius:8,padding:'14px 18px',marginBottom:14}}>
-            {[['Plan','Regular Monthly — ₱999/mo'],['Payment','GCash'],['Assessment','Free body comp scan · Day 1'],['Coach Assignment','Within 24 hours of signup'],['Start Date','Immediate access upon payment']].map(([k,v])=>(
+            {[['Plan',`${cp.label} — ₱${cp.price.toLocaleString()}`],['Payment',pay.charAt(0).toUpperCase()+pay.slice(1)],['Assessment','Free body comp scan · Day 1'],['Coach Assignment','Within 24 hours of signup'],['Start Date','Immediate access upon payment']].map(([k,v])=>(
               <div key={k} style={{display:'flex',justifyContent:'space-between',padding:'5px 0',fontSize:13}}><span style={{color:C.text2}}>{k}</span><span>{v}</span></div>
             ))}
           </div>
@@ -560,7 +562,7 @@ function JoinPage({goTo}){
       </div>
       <div style={{display:'flex',gap:10}}>
         {step>0&&<button style={{...btn(C.red,true),flex:1}} onClick={()=>setStep(n=>n-1)}>Back</button>}
-        <button style={{...btn(),flex:2}} onClick={()=>setStep(n=>n+1)}>{step===5?'Confirm and Pay ₱999':'Continue'}</button>
+        <button style={{...btn(),flex:2}} onClick={()=>setStep(n=>n+1)}>{step===5?`Confirm and Pay ₱${cp.price.toLocaleString()}`:'Continue'}</button>
       </div>
     </div>
   );
@@ -624,7 +626,7 @@ function AdminDashboard(){
   const pct=Math.round((METRICS.mtdRevenue/METRICS.target)*100);
   return(
     <div>
-      <div style={{marginBottom:22}}><span style={lbl}>Aurora Operator Suite</span><h2 style={h2s}>Dashboard</h2><div style={{fontSize:12,color:C.text3}}>Tuesday, June 9, 2026 · Malvar, Batangas</div></div>
+      <div style={{marginBottom:22}}><span style={lbl}>Aurora Operator Suite</span><h2 style={h2s}>Dashboard</h2><div style={{fontSize:12,color:C.text3}}>{new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} · Malvar, Batangas</div></div>
       <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:20}}>
         {[['MTD Revenue',`₱${METRICS.mtdRevenue.toLocaleString()}`,`${pct}% of target`,C.green],
           ['Active Members',METRICS.active,'5 at risk of churn',C.gold],
@@ -917,10 +919,74 @@ function AdminSettings(){
   );
 }
 
+function AdminPL(){
+  const revenue=METRICS.mtdRevenue;
+  const exp={Rent:25000,Salaries:35000,Utilities:8000,Supplies:3500,Marketing:5000};
+  const totalExp=Object.values(exp).reduce((a,b)=>a+b,0);
+  const grossProfit=revenue-totalExp;
+  const taxEst=Math.round(grossProfit*0.25);
+  const netProfit=grossProfit-taxEst;
+  const grossMargin=Math.round((grossProfit/revenue)*100);
+  const netMargin=Math.round((netProfit/revenue)*100);
+  return(
+    <div>
+      <span style={lbl}>Financials</span><h2 style={h2s}>P&L Overview</h2>
+      <div style={{fontSize:11,color:C.text3,marginBottom:20}}>Month-to-date · June 2026 · 17 days in</div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:20}}>
+        {[['Revenue',`₱${revenue.toLocaleString()}`,C.green],['Total Expenses',`₱${totalExp.toLocaleString()}`,C.red],['Gross Profit',`₱${grossProfit.toLocaleString()}`,C.green],['Net Profit',`₱${netProfit.toLocaleString()}`,C.gold]].map(([l,v,color])=>(
+          <div key={l} style={metric}><div style={{fontSize:11,color:C.text3,marginBottom:4}}>{l}</div><div style={{fontSize:20,fontWeight:700,color}}>{v}</div></div>
+        ))}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:20}}>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Gross Margin</div>
+          <div style={{fontSize:36,fontWeight:800,color:C.green,marginBottom:8}}>{grossMargin}%</div>
+          <div style={{height:6,background:C.elev,borderRadius:3}}><div style={{height:'100%',background:C.green,borderRadius:3,width:`${grossMargin}%`}}/></div>
+          <div style={{fontSize:11,color:C.text3,marginTop:8}}>Revenue minus operating expenses</div>
+        </div>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Net Margin (after 25% tax est.)</div>
+          <div style={{fontSize:36,fontWeight:800,color:C.gold,marginBottom:8}}>{netMargin}%</div>
+          <div style={{height:6,background:C.elev,borderRadius:3}}><div style={{height:'100%',background:C.gold,borderRadius:3,width:`${netMargin}%`}}/></div>
+          <div style={{fontSize:11,color:C.text3,marginTop:8}}>Net: ₱{netProfit.toLocaleString()} after ₱{taxEst.toLocaleString()} estimated tax</div>
+        </div>
+      </div>
+      <div style={card}>
+        <div style={{fontWeight:600,marginBottom:16,fontSize:13}}>Expense Breakdown</div>
+        {Object.entries(exp).map(([key,val])=>{
+          const pct=Math.round((val/totalExp)*100);
+          return(
+            <div key={key} style={{marginBottom:12}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:4}}><span>{key}</span><span>₱{val.toLocaleString()} ({pct}%)</span></div>
+              <div style={{height:3,background:C.elev,borderRadius:2}}><div style={{height:'100%',background:C.text3,borderRadius:2,width:`${pct}%`}}/></div>
+            </div>
+          );
+        })}
+        <div style={{borderTop:`1px solid ${C.border}`,paddingTop:12,marginTop:4,display:'flex',justifyContent:'space-between',fontSize:13,fontWeight:700}}>
+          <span>Total</span><span style={{color:C.red}}>₱{totalExp.toLocaleString()}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function AdminSuite(){
+  const [unlocked,setUnlocked]=useState(false);
+  const [pin,setPin]=useState('');
+  if(!unlocked)return(
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'calc(100vh - 56px)',background:C.bg}}>
+      <div style={{...card,maxWidth:320,width:'90%',textAlign:'center',padding:'36px 28px'}}>
+        <div style={{...DISPLAY,fontSize:26,color:C.red,marginBottom:4}}>OPERATOR SUITE</div>
+        <div style={{fontSize:11,color:C.text3,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:24}}>Iron Tribe · Restricted Access</div>
+        <input type="password" placeholder="Enter operator code" value={pin} onChange={e=>setPin(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'){if(pin==='irontribe2026')setUnlocked(true);else setPin('');}}} style={{marginBottom:12,textAlign:'center',letterSpacing:'0.2em'}}/>
+        <button style={{...btn(),width:'100%',fontSize:13}} onClick={()=>{if(pin==='irontribe2026')setUnlocked(true);else setPin('');}}>Enter</button>
+        <div style={{fontSize:11,color:C.text3,marginTop:16}}>Authorized personnel only</div>
+      </div>
+    </div>
+  );
   const [panel,setPanel]=useState('dashboard');
-  const nav=[['dashboard','Dashboard'],['leads','Leads'],['members','Members'],['coaches','Coaches'],['bookings','Bookings'],['challenges','Challenges'],['reviews','Reviews'],['marketing','Marketing'],['intelligence','Intelligence'],['ai','AI Console'],['settings','Settings']];
-  const panels={dashboard:AdminDashboard,leads:AdminLeads,members:AdminMembers,coaches:AdminCoaches,bookings:AdminBookings,challenges:AdminChallenges,reviews:AdminReviews,marketing:AdminMarketing,intelligence:AdminIntelligence,ai:AdminAIConsole,settings:AdminSettings};
+  const nav=[['dashboard','Dashboard'],['pl','P&L'],['leads','Leads'],['members','Members'],['coaches','Coaches'],['bookings','Bookings'],['challenges','Challenges'],['reviews','Reviews'],['marketing','Marketing'],['intelligence','Intelligence'],['ai','AI Console'],['settings','Settings']];
+  const panels={dashboard:AdminDashboard,pl:AdminPL,leads:AdminLeads,members:AdminMembers,coaches:AdminCoaches,bookings:AdminBookings,challenges:AdminChallenges,reviews:AdminReviews,marketing:AdminMarketing,intelligence:AdminIntelligence,ai:AdminAIConsole,settings:AdminSettings};
   const Panel=panels[panel]||AdminDashboard;
   return(
     <div style={{display:'flex',height:'calc(100vh - 56px)'}}>
@@ -931,6 +997,34 @@ function AdminSuite(){
       </div>
       <div style={{flex:1,overflowY:'auto',padding:'28px 32px'}}><Panel/></div>
     </div>
+  );
+}
+
+function Footer({goTo}){
+  return(
+    <footer style={{background:'#050507',borderTop:`1px solid ${C.border}`,padding:'36px 28px 24px'}}>
+      <div style={{maxWidth:1100,margin:'0 auto',display:'grid',gridTemplateColumns:'1.5fr 1fr 1fr',gap:32,marginBottom:24}}>
+        <div>
+          <div style={{...DISPLAY,color:C.red,fontSize:20,marginBottom:10}}>IRON TRIBE FITNESS GYM</div>
+          <div style={{fontSize:13,color:C.text3,lineHeight:1.8}}>4F Noli Rose Bldg, 474 J.P. Laurel Hwy<br/>Poblacion, Malvar, Batangas 4233<br/>+63 956 700 7785<br/>Open 8:00 AM – 10:00 PM daily</div>
+        </div>
+        <div>
+          <div style={{fontSize:11,fontWeight:700,color:C.text2,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.08em'}}>Pages</div>
+          {[['home','Home'],['memberships','Memberships'],['coaching','Coaching'],['classes','Classes'],['transformations','Results'],['about','About'],['contact','Contact'],['faq','FAQ']].map(([p,l])=>(
+            <div key={p} onClick={()=>goTo(p)} style={{fontSize:13,color:C.text3,marginBottom:7,cursor:'pointer'}}>{l}</div>
+          ))}
+        </div>
+        <div>
+          <div style={{fontSize:11,fontWeight:700,color:C.text2,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.08em'}}>Get Started</div>
+          <div style={{fontSize:13,color:C.text3,lineHeight:1.8,marginBottom:16}}>Free body assessment — no commitment required. We'll match you with the right coach and program from day one.</div>
+          <button style={{...btn(),fontSize:13,padding:'10px 18px'}} onClick={()=>goTo('join')}>Book Free Assessment</button>
+        </div>
+      </div>
+      <div style={{maxWidth:1100,margin:'0 auto',paddingTop:16,borderTop:`1px solid ${C.border}`,display:'flex',justifyContent:'space-between',fontSize:11,color:C.text3}}>
+        <span>© 2026 Iron Tribe Fitness Gym · Malvar, Batangas</span>
+        <span>Powered by <span style={{color:C.red}}>Aurora Digital Foundry</span></span>
+      </div>
+    </footer>
   );
 }
 
@@ -951,9 +1045,10 @@ function App(){
     faq:<FAQPage/>,
   };
   return(
-    <div style={{background:C.bg,minHeight:'100vh',color:C.text}}>
+    <div style={{background:C.bg,minHeight:'100vh',color:C.text,display:'flex',flexDirection:'column'}}>
       <NavBar page={page} goTo={goTo} adminMode={adminMode} setAdminMode={setAdminMode}/>
-      {adminMode?<AdminSuite/>:(pages[page]||pages.home)}
+      <div style={{flex:1}}>{adminMode?<AdminSuite/>:(pages[page]||pages.home)}</div>
+      {!adminMode&&<Footer goTo={goTo}/>}
     </div>
   );
 }
