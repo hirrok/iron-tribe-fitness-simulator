@@ -12,13 +12,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#070709;color:#F0F0F5;font-family:'Inter',system-ui,sans-serif;min-height:100%}
-input,textarea,select{background:#14141A;border:1px solid #1E1E28;border-radius:8px;padding:10px 14px;color:#F0F0F5;font-size:14px;width:100%;outline:none;font-family:'Inter',system-ui,sans-serif}
-input:focus,textarea:focus{border-color:#EF4444}
+html,body{background:#080807;color:#F0E8D8;font-family:'Inter',system-ui,sans-serif;min-height:100%}
+input,textarea,select{background:#161510;border:1px solid #22201A;border-radius:8px;padding:10px 14px;color:#F0E8D8;font-size:14px;width:100%;outline:none;font-family:'Inter',system-ui,sans-serif}
+input:focus,textarea:focus{border-color:#C9A84C}
 textarea{resize:vertical;min-height:100px}
 ::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:#070709}
-::-webkit-scrollbar-thumb{background:#1E1E28;border-radius:2px}
+::-webkit-scrollbar-track{background:#080807}
+::-webkit-scrollbar-thumb{background:#22201A;border-radius:2px}
 </style>
 </head>
 <body>
@@ -27,13 +27,13 @@ textarea{resize:vertical;min-height:100px}
 const { useState, useEffect, useRef, useCallback } = React;
 
 const C = {
-  bg:'#070709',card:'#0F0F12',elev:'#14141A',hover:'#1A1A22',
-  red:'#EF4444',redDim:'rgba(239,68,68,0.12)',
-  gold:'#F59E0B',goldDim:'rgba(245,158,11,0.12)',
+  bg:'#080807',card:'#100F0A',elev:'#161510',hover:'#1E1D15',
+  red:'#C9A84C',redDim:'rgba(201,168,76,0.12)',
+  gold:'#D4A843',goldDim:'rgba(212,168,67,0.12)',
   green:'#10B981',greenDim:'rgba(16,185,129,0.12)',
-  purple:'#8B5CF6',blue:'#3B82F6',
-  border:'#1E1E28',borderBright:'#2A2A36',
-  text:'#F0F0F5',text2:'#A0A0B0',text3:'#50506A',
+  purple:'#9B7EC8',blue:'#4A90D9',
+  border:'#22201A',borderBright:'#332F24',
+  text:'#F0E8D8',text2:'#A89C84',text3:'#5C5444',
 };
 
 const btn=(color=C.red,outline=false)=>({background:outline?'transparent':color,color:outline?C.text:'#fff',border:outline?`1px solid ${C.borderBright}`:'none',borderRadius:8,padding:'10px 18px',fontSize:14,fontWeight:600,cursor:'pointer'});
@@ -154,7 +154,7 @@ function useTypewriter(speed=10){
 function NavBar({page,goTo,adminMode,setAdminMode}){
   const links=[['home','Home'],['memberships','Memberships'],['coaching','Coaching'],['classes','Classes'],['transformations','Results'],['stories','Stories'],['about','About'],['faq','FAQ']];
   if(adminMode)return(
-    <nav style={{background:'#08080C',borderBottom:`1px solid ${C.border}`,padding:'0 24px',height:56,display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:100}}>
+    <nav style={{background:'#0A0908',borderBottom:`1px solid ${C.border}`,padding:'0 24px',height:56,display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:100}}>
       <div style={{display:'flex',alignItems:'center',gap:10}}>
         <span style={{...bdg(C.red),fontSize:10}}>OPERATOR SUITE</span>
         <span style={{fontWeight:700,fontSize:14}}>Iron Tribe Admin</span>
@@ -851,7 +851,7 @@ function AdminMarketing(){
         ))}
       </div>
       {active&&(
-        <div style={{...card,background:'#08080C'}}>
+        <div style={{...card,background:'#0A0908'}}>
           <div style={{display:'flex',justifyContent:'space-between',marginBottom:10}}>
             <span style={{...bdg(C.red),fontSize:10}}>{active.toUpperCase()}</span>
             <span style={{fontSize:11,color:C.text3}}>{running?'Generating...':'Done'}</span>
@@ -919,7 +919,7 @@ function AdminAIConsole(){
         ))}
       </div>
       {query&&(
-        <div style={{...card,background:'#08080C'}}>
+        <div style={{...card,background:'#0A0908'}}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
             <span style={{...bdg(C.red),fontSize:10}}>AI ANALYSIS</span>
             <span style={{fontSize:11,color:C.text3}}>{running?'Analyzing Iron Tribe data...':'Analysis complete'}</span>
@@ -1025,7 +1025,7 @@ function AdminSuite(){
   const Panel=panels[panel]||AdminDashboard;
   return(
     <div style={{display:'flex',height:'calc(100vh - 56px)'}}>
-      <div style={{width:200,background:'#050507',borderRight:`1px solid ${C.border}`,padding:'16px 10px',flexShrink:0,overflowY:'auto'}}>
+      <div style={{width:200,background:'#060604',borderRight:`1px solid ${C.border}`,padding:'16px 10px',flexShrink:0,overflowY:'auto'}}>
         {nav.map(([k,l])=>(
           <div key={k} onClick={()=>setPanel(k)} style={{padding:'9px 12px',borderRadius:8,marginBottom:3,cursor:'pointer',fontSize:13,background:panel===k?C.redDim:'transparent',color:panel===k?C.red:C.text2,fontWeight:panel===k?600:400,userSelect:'none'}}>{l}</div>
         ))}
@@ -1037,7 +1037,7 @@ function AdminSuite(){
 
 function Footer({goTo}){
   return(
-    <footer style={{background:'#050507',borderTop:`1px solid ${C.border}`,padding:'36px 28px 24px'}}>
+    <footer style={{background:'#060604',borderTop:`1px solid ${C.border}`,padding:'36px 28px 24px'}}>
       <div style={{maxWidth:1100,margin:'0 auto',display:'grid',gridTemplateColumns:'1.5fr 1fr 1fr',gap:32,marginBottom:24}}>
         <div>
           <div style={{...DISPLAY,color:C.red,fontSize:20,marginBottom:10}}>IRON TRIBE FITNESS GYM</div>
@@ -1092,3 +1092,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
 </body>
 </html>
+ 
