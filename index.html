@@ -930,7 +930,7 @@ function AdminPL(){
   const netMargin=Math.round((netProfit/revenue)*100);
   return(
     <div>
-      <span style={lbl}>Financials</span><h2 style={h2s}>P&L Overview</h2>
+      <span style={lbl}>Financials</span><h2 style={h2s}>{'P&L Overview'}</h2>
       <div style={{fontSize:11,color:C.text3,marginBottom:20}}>Month-to-date · June 2026 · 17 days in</div>
       <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:20}}>
         {[['Revenue',`₱${revenue.toLocaleString()}`,C.green],['Total Expenses',`₱${totalExp.toLocaleString()}`,C.red],['Gross Profit',`₱${grossProfit.toLocaleString()}`,C.green],['Net Profit',`₱${netProfit.toLocaleString()}`,C.gold]].map(([l,v,color])=>(
