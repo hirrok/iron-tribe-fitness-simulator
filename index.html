@@ -23,6 +23,11 @@ textarea{resize:vertical;min-height:100px}
 </head>
 <body>
 <div id="root"></div>
+<script>
+window.onerror=function(msg,src,line,col,err){
+  document.getElementById('root').innerHTML='<div style="color:#EF4444;padding:40px;font-family:monospace;background:#070709;min-height:100vh"><h2 style="margin-bottom:16px">RENDER ERROR</h2><div style="color:#F0F0F5">'+msg+'</div><div style="color:#A0A0B0;margin-top:8px">Line '+line+'</div><pre style="margin-top:16px;color:#A0A0B0;font-size:12px;white-space:pre-wrap">'+(err?err.stack:'')+'</pre></div>';
+};
+</script>
 <script type="text/babel">
 const { useState, useEffect, useRef, useCallback } = React;
 
