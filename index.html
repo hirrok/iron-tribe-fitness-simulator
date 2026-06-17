@@ -42,6 +42,12 @@ const metric={background:C.elev,borderRadius:10,padding:'16px 20px'};
 const lbl={fontSize:11,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:C.red,marginBottom:8,display:'block'};
 const bdg=(color)=>({background:`${color}22`,color,fontSize:11,fontWeight:700,padding:'3px 8px',borderRadius:4});
 const sec={padding:'52px 28px',maxWidth:1100,margin:'0 auto'};
+const PHOTOS={
+  gymWide:'https://scontent.fmnl4-1.fna.fbcdn.net/v/t39.30808-6/608638517_122109701301155782_4146510623571883843_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1366&ctp=s2048x1366&_nc_cat=103&ccb=1-7&_nc_sid=f727a1&_nc_ohc=usB5-jCHuLIQ7kNvwEZK02V&_nc_oc=AdoJnY_DX861tMPkNvmtTHs22vcfIpXr9xOZN2JosFfrMHS-YCNsgRG43Zhz9bXRSwDZDEifDwbZ7lZMDbiKep8p&_nc_zt=23&_nc_ht=scontent.fmnl4-1.fna&_nc_gid=EoHKS3IB88wjny7MGmNgiA&_nc_ss=7b2a8&oh=00_Af8Lfv4xhbVocFZ3kBRI75m5VN_5ap3BkLhlrbf_BLUDQw&oe=6A37E62A',
+  portrait1:'https://scontent.fmnl4-7.fna.fbcdn.net/v/t39.30808-6/713601408_122131247481155782_3141417591347493058_n.jpg?stp=dst-jpg_tt6&cstp=mx1152x2048&ctp=s1152x2048&_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_ohc=lTF_q89ltHgQ7kNvwHL2Epi&_nc_oc=AdqEoayoETLzCzg3ZneJzvCMPT6J5OjFJxEUD8XXfUCiEEdpz9sl4GW_RRXeejZR61X1H-OJBHHuLahv83xr7n2R&_nc_zt=23&_nc_ht=scontent.fmnl4-7.fna&_nc_gid=rXUoXyWNY0asrVrV50Qawg&_nc_ss=7b2a8&oh=00_Af8TzMx4JqOq8CKHhEyZP-Cu2W294857FMqJoSfw7tni4A&oe=6A3803AC',
+  portrait2:'https://scontent.fmnl4-3.fna.fbcdn.net/v/t39.30808-6/629833267_122115688575155782_9032204648800219043_n.jpg?stp=dst-jpg_tt6&cstp=mx1638x2048&ctp=s1638x2048&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_ohc=QgRAt9Fui58Q7kNvwH3d8FA&_nc_oc=Adr7O_XG1kxcg0WDBHO_oYI8rb9wm9wKRiPN_IVFIhZjk47oP5AR0AIHlcGFtuV9CzOLDFGYF8PGRuMlULVHr-v&_nc_zt=23&_nc_ht=scontent.fmnl4-3.fna&_nc_gid=wgv-ISOjO0DjhhMvo3MElw&_nc_ss=7b2a8&oh=00_Af_vsVdXwGsxCREqu_ktpGqeZ7v2QQJLEynPH9bDqANKtQ&oe=6A37F2DC',
+  gymFloor:'https://scontent.fmnl4-6.fna.fbcdn.net/v/t39.30808-6/619384777_122113413453155782_1901401156046318016_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1717&ctp=s2048x1717&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_ohc=9eitkvwHi7MQ7kNvwGl8pC3&_nc_oc=AdpgbWl2kQACta0iAIXuXgFjNywQeUcsVz5z47FVnUpc5LAZp0iwmedTIEPqM31ofcanrOfxwYx5UnWXmwSBbIhV&_nc_zt=23&_nc_ht=scontent.fmnl4-6.fna&_nc_gid=nJKy1RkRlUDjDVySJzL3HQ&_nc_ss=7b2a8&oh=00_Af-Xas5g01kAFiHQEDe7UIe8E5xv332injYB9hXtNNZ3Jw&oe=6A37E9E3',
+};
 const h1s={fontSize:32,fontWeight:700,margin:'8px 0 16px'};
 const h2s={fontSize:24,fontWeight:700,margin:'8px 0 20px'};
 const DISPLAY={fontFamily:"'Bebas Neue',sans-serif",letterSpacing:'1px'};
@@ -178,15 +184,23 @@ function NavBar({page,goTo,adminMode,setAdminMode}){
 function HomePage({goTo}){
   return(
     <div>
-      <div style={{...sec,paddingTop:80,paddingBottom:64}}>
-        <span style={lbl}>Malvar, Batangas · Est. 2023</span>
-        <h1 style={{...DISPLAY,fontSize:64,fontWeight:800,lineHeight:1.0,margin:'10px 0 20px'}}>The Fitness Home<br/><span style={{color:C.red}}>for Malvar.</span></h1>
-        <p style={{color:C.text2,fontSize:15,maxWidth:500,lineHeight:1.7,marginBottom:28}}>Iron Tribe is a coaching-led training environment. Every member gets a dedicated coach, a structured program, and a community that keeps you accountable.</p>
-        <div style={{display:'flex',gap:10,marginBottom:14}}>
-          <button style={{...btn(),padding:'13px 26px',fontSize:14}} onClick={()=>goTo('join')}>Book Free Assessment</button>
-          <button style={{...btn(C.red,true),padding:'13px 26px',fontSize:14}} onClick={()=>goTo('memberships')}>View Plans</button>
+      <div style={{...sec,paddingTop:72,paddingBottom:64}}>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:56,alignItems:'center'}}>
+          <div>
+            <span style={lbl}>Malvar, Batangas · Est. 2023</span>
+            <h1 style={{...DISPLAY,fontSize:64,fontWeight:800,lineHeight:1.0,margin:'10px 0 20px'}}>The Fitness Home<br/><span style={{color:C.red}}>for Malvar.</span></h1>
+            <p style={{color:C.text2,fontSize:15,lineHeight:1.7,marginBottom:28}}>Iron Tribe is a coaching-led training environment. Every member gets a dedicated coach, a structured program, and a community that keeps you accountable.</p>
+            <div style={{display:'flex',gap:10,marginBottom:14}}>
+              <button style={{...btn(),padding:'13px 26px',fontSize:14}} onClick={()=>goTo('join')}>Book Free Assessment</button>
+              <button style={{...btn(C.red,true),padding:'13px 26px',fontSize:14}} onClick={()=>goTo('memberships')}>View Plans</button>
+            </div>
+            <div style={{fontSize:12,color:C.text3}}>4F Noli Rose Bldg, 474 J.P. Laurel Hwy, Malvar · Open 8AM–10PM Daily</div>
+          </div>
+          <div style={{position:'relative'}}>
+            <img src={PHOTOS.gymWide} alt="Iron Tribe Fitness Gym — Malvar, Batangas" style={{width:'100%',height:420,objectFit:'cover',borderRadius:16,display:'block'}}/>
+            <div style={{position:'absolute',bottom:16,left:16,background:'rgba(7,7,9,0.75)',backdropFilter:'blur(8px)',borderRadius:8,padding:'8px 14px',fontSize:11,color:C.text2,letterSpacing:'0.05em'}}>Iron Tribe · Malvar, Batangas</div>
+          </div>
         </div>
-        <div style={{fontSize:12,color:C.text3}}>4F Noli Rose Bldg, 474 J.P. Laurel Hwy, Malvar · Open 8AM–10PM Daily</div>
       </div>
       <div style={{background:C.card,borderTop:`1px solid ${C.border}`,borderBottom:`1px solid ${C.border}`}}>
         <div style={{maxWidth:1100,margin:'0 auto',padding:'22px 28px',display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:24}}>
@@ -213,6 +227,13 @@ function HomePage({goTo}){
               <span style={{color:C.red,fontSize:13,fontWeight:600}}>Explore</span>
             </div>
           ))}
+        </div>
+      </div>
+      <div style={{padding:'0 28px 56px'}}>
+        <div style={{maxWidth:1100,margin:'0 auto',display:'grid',gridTemplateColumns:'2fr 1fr 1fr',gap:8,borderRadius:16,overflow:'hidden'}}>
+          <img src={PHOTOS.gymFloor} alt="Iron Tribe gym floor" style={{width:'100%',height:320,objectFit:'cover',display:'block'}}/>
+          <img src={PHOTOS.portrait1} alt="Iron Tribe training" style={{width:'100%',height:320,objectFit:'cover',display:'block'}}/>
+          <img src={PHOTOS.portrait2} alt="Iron Tribe coaching" style={{width:'100%',height:320,objectFit:'cover',display:'block'}}/>
         </div>
       </div>
       <div style={{background:C.card,borderTop:`1px solid ${C.border}`,padding:'56px 28px'}}>
@@ -376,6 +397,11 @@ function TransformationsPage({goTo}){
     {name:'Liza Torres',duration:'3 months',result:'Resting heart rate: 92 to 68 bpm',coach:'Coach Rica',plan:'Regular Monthly'},
   ];
   return(
+    <div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:0,height:280,overflow:'hidden',marginBottom:0}}>
+        <img src={PHOTOS.portrait1} alt="Iron Tribe member training" style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
+        <img src={PHOTOS.portrait2} alt="Iron Tribe coaching session" style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
+      </div>
     <div style={sec}>
       <span style={lbl}>Results</span>
       <h1 style={h1s}>Member Transformations</h1>
@@ -396,14 +422,22 @@ function TransformationsPage({goTo}){
         </div>
       </div>
     </div>
+    </div>
   );
 }
 
 function AboutPage({goTo}){
   return(
+    <div>
+      <div style={{width:'100%',height:360,overflow:'hidden',position:'relative',marginBottom:0}}>
+        <img src={PHOTOS.gymWide} alt="Iron Tribe Fitness Gym" style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center 40%',display:'block'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom, rgba(7,7,9,0.2), rgba(7,7,9,0.7))'}}/>
+        <div style={{position:'absolute',bottom:28,left:28}}>
+          <span style={{...lbl,marginBottom:4}}>Our Story</span>
+          <h1 style={{...DISPLAY,fontSize:48,color:'#fff'}}>About Iron Tribe</h1>
+        </div>
+      </div>
     <div style={sec}>
-      <span style={lbl}>Our Story</span>
-      <h1 style={h1s}>About Iron Tribe</h1>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:28,marginBottom:36}}>
         <div>
           <p style={{color:C.text2,fontSize:14,lineHeight:1.8,marginBottom:16}}>Iron Tribe Fitness Gym was built for the people of Malvar, Batangas. We saw a community full of people who wanted to train seriously — but had nowhere to go that took their goals as seriously as they did.</p>
@@ -436,6 +470,7 @@ function AboutPage({goTo}){
       <div style={{textAlign:'center'}}>
         <button style={{...btn(),padding:'13px 28px',fontSize:14}} onClick={()=>goTo('join')}>Start with a Free Assessment</button>
       </div>
+    </div>
     </div>
   );
 }
@@ -983,7 +1018,7 @@ function AdminSuite(){
         <button style={{...btn(),width:'100%',fontSize:13}} onClick={()=>{if(pin==='irontribe2026')setUnlocked(true);else setPin('');}}>Enter</button>
         <div style={{fontSize:11,color:C.text3,marginTop:16}}>Authorized personnel only</div>
       </div>
-    </div>
+      </div>
   );
   const nav=[['dashboard','Dashboard'],['pl','P&L'],['leads','Leads'],['members','Members'],['coaches','Coaches'],['bookings','Bookings'],['challenges','Challenges'],['reviews','Reviews'],['marketing','Marketing'],['intelligence','Intelligence'],['ai','AI Console'],['settings','Settings']];
   const panels={dashboard:AdminDashboard,pl:AdminPL,leads:AdminLeads,members:AdminMembers,coaches:AdminCoaches,bookings:AdminBookings,challenges:AdminChallenges,reviews:AdminReviews,marketing:AdminMarketing,intelligence:AdminIntelligence,ai:AdminAIConsole,settings:AdminSettings};
