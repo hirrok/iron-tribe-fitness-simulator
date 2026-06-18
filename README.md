@@ -25,4 +25,4 @@ A premium fitness business infrastructure demo for Iron Tribe Fitness Gym, Malva
 - **Deploy:** GitHub Pages → custom domain
 
 ---
-Built by [Aurora Digital Foundry](https://github.com/aurora-digital-foundry)
+Built by [Aurora Digital Foundry](https://github.com/hirrok/adf-hq)

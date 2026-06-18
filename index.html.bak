@@ -12,13 +12,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#080807;color:#F0E8D8;font-family:'Inter',system-ui,sans-serif;min-height:100%}
-input,textarea,select{background:#161510;border:1px solid #22201A;border-radius:8px;padding:10px 14px;color:#F0E8D8;font-size:14px;width:100%;outline:none;font-family:'Inter',system-ui,sans-serif}
-input:focus,textarea:focus{border-color:#C9A84C}
+html,body{background:#070709;color:#F0F0F5;font-family:'Inter',system-ui,sans-serif;min-height:100%}
+input,textarea,select{background:#14141A;border:1px solid #1E1E28;border-radius:8px;padding:10px 14px;color:#F0F0F5;font-size:14px;width:100%;outline:none;font-family:'Inter',system-ui,sans-serif}
+input:focus,textarea:focus{border-color:#EF4444}
 textarea{resize:vertical;min-height:100px}
 ::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:#080807}
-::-webkit-scrollbar-thumb{background:#22201A;border-radius:2px}
+::-webkit-scrollbar-track{background:#070709}
+::-webkit-scrollbar-thumb{background:#1E1E28;border-radius:2px}
 </style>
 </head>
 <body>
@@ -27,13 +27,13 @@ textarea{resize:vertical;min-height:100px}
 const { useState, useEffect, useRef, useCallback } = React;
 
 const C = {
-  bg:'#080807',card:'#100F0A',elev:'#161510',hover:'#1E1D15',
-  red:'#C9A84C',redDim:'rgba(201,168,76,0.12)',
-  gold:'#D4A843',goldDim:'rgba(212,168,67,0.12)',
+  bg:'#070709',card:'#0F0F12',elev:'#14141A',hover:'#1A1A22',
+  red:'#EF4444',redDim:'rgba(239,68,68,0.12)',
+  gold:'#F59E0B',goldDim:'rgba(245,158,11,0.12)',
   green:'#10B981',greenDim:'rgba(16,185,129,0.12)',
-  purple:'#9B7EC8',blue:'#4A90D9',
-  border:'#22201A',borderBright:'#332F24',
-  text:'#F0E8D8',text2:'#A89C84',text3:'#5C5444',
+  purple:'#8B5CF6',blue:'#3B82F6',
+  border:'#1E1E28',borderBright:'#2A2A36',
+  text:'#F0F0F5',text2:'#A0A0B0',text3:'#50506A',
 };
 
 const btn=(color=C.red,outline=false)=>({background:outline?'transparent':color,color:outline?C.text:'#fff',border:outline?`1px solid ${C.borderBright}`:'none',borderRadius:8,padding:'10px 18px',fontSize:14,fontWeight:600,cursor:'pointer'});
@@ -151,79 +151,10 @@ function useTypewriter(speed=10){
   return{display,running,startTyping};
 }
 
-
-const REACT_CONFIG={GAS_URL:''};
-
-function useGAS(action,params,trigger){
-  const [data,setData]=useState(null);
-  const [loading,setLoading]=useState(true);
-  const [error,setError]=useState(null);
-  const [rev,setRev]=useState(0);
-  const refresh=useCallback(()=>setRev(r=>r+1),[]);
-  useEffect(()=>{
-    if(!REACT_CONFIG.GAS_URL){setLoading(false);setError('GAS_URL not configured — see DEPLOY.md');return;}
-    setLoading(true);setError(null);
-    const qs=new URLSearchParams({action,...(params||{})}).toString();
-    fetch(REACT_CONFIG.GAS_URL+'?'+qs)
-      .then(r=>r.json())
-      .then(r=>{if(r.ok)setData(r.data);else setError(r.error);})
-      .catch(e=>setError(e.message))
-      .finally(()=>setLoading(false));
-  },[rev,trigger||0]);
-  return{data,loading,error,refresh};
-}
-
-function useMutation(){
-  const [loading,setLoading]=useState(false);
-  const mutate=async(action,payload)=>{
-    if(!REACT_CONFIG.GAS_URL)throw new Error('GAS_URL not configured');
-    setLoading(true);
-    try{
-      const r=await fetch(REACT_CONFIG.GAS_URL,{method:'POST',body:JSON.stringify({action,...payload})});
-      const j=await r.json();
-      if(!j.ok)throw new Error(j.error);
-      return j.data;
-    }finally{setLoading(false);}
-  };
-  return{mutate,loading};
-}
-
-function Spin(){return <div style={{padding:'36px',textAlign:'center',color:C.text3,fontSize:13}}>Loading...</div>;}
-
-function GASNote({error}){
-  if(!error)return null;
-  if(error.includes('GAS_URL'))return(
-    <div style={{...card,border:`1px solid ${C.gold}`,marginBottom:16}}>
-      <b style={{color:C.gold,fontSize:13}}>Backend not connected</b>
-      <div style={{fontSize:12,color:C.text2,marginTop:4}}>Set REACT_CONFIG.GAS_URL to your GAS deployment URL. See DEPLOY.md.</div>
-    </div>
-  );
-  return <div style={{...card,border:`1px solid ${C.red}`,marginBottom:16,fontSize:12,color:C.red}}>{error}</div>;
-}
-
-function Modal({onClose,title,children}){
-  return(
-    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.78)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:16}} onClick={onClose}>
-      <div style={{...card,maxWidth:500,width:'100%',maxHeight:'88vh',overflowY:'auto',border:`1px solid ${C.borderBright}`}} onClick={e=>e.stopPropagation()}>
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
-          <b style={{fontSize:15}}>{title}</b>
-          <button onClick={onClose} style={{background:'none',border:'none',color:C.text2,fontSize:22,cursor:'pointer',padding:'0 4px'}}>x</button>
-        </div>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function FR({label,children}){return <div style={{marginBottom:12}}><div style={{fontSize:11,color:C.text2,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:5}}>{label}</div>{children}</div>;}
-function FI({v,sv,ph,type}){return <input value={v||''} onChange={e=>sv(e.target.value)} placeholder={ph||''} type={type||'text'} style={{fontSize:13}}/>;}
-function FS({v,sv,opts}){return <select value={v||''} onChange={e=>sv(e.target.value)} style={{fontSize:13}}>{opts.map(o=><option key={o} value={o}>{o}</option>)}</select>;}
-
-
 function NavBar({page,goTo,adminMode,setAdminMode}){
   const links=[['home','Home'],['memberships','Memberships'],['coaching','Coaching'],['classes','Classes'],['transformations','Results'],['stories','Stories'],['about','About'],['faq','FAQ']];
   if(adminMode)return(
-    <nav style={{background:'#0A0908',borderBottom:`1px solid ${C.border}`,padding:'0 24px',height:56,display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:100}}>
+    <nav style={{background:'#08080C',borderBottom:`1px solid ${C.border}`,padding:'0 24px',height:56,display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:100}}>
       <div style={{display:'flex',alignItems:'center',gap:10}}>
         <span style={{...bdg(C.red),fontSize:10}}>OPERATOR SUITE</span>
         <span style={{fontWeight:700,fontSize:14}}>Iron Tribe Admin</span>
@@ -726,24 +657,16 @@ function FAQPage(){
   );
 }
 
-
 function AdminDashboard(){
-  const {data:d,loading,error,refresh}=useGAS('getDashboard');
-  const pct=d?Math.min(100,Math.round(((d.monthRevenue||0)/100000)*100)):0;
+  const pct=Math.round((METRICS.mtdRevenue/METRICS.target)*100);
   return(
     <div>
-      <GASNote error={error}/>
-      <div style={{marginBottom:20}}>
-        <span style={lbl}>Aurora Operator Suite</span><h2 style={h2s}>Dashboard</h2>
-        <div style={{fontSize:12,color:C.text3}}>{new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} · Malvar, Batangas</div>
-      </div>
-      {loading&&!d?<Spin/>:(
-      <>
+      <div style={{marginBottom:22}}><span style={lbl}>Aurora Operator Suite</span><h2 style={h2s}>Dashboard</h2><div style={{fontSize:12,color:C.text3}}>{new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} · Malvar, Batangas</div></div>
       <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:20}}>
-        {[['MTD Revenue','\u20b1'+((d||{}).monthRevenue||0).toLocaleString(),pct+'% of \u20b1100K target',C.green],
-          ['Active Members',(d||{}).activeMembers||'\u2014',(d||{}).totalMembers||0+' total',C.gold],
-          ['Open Leads',(d||{}).openLeads||'\u2014',(d||{}).totalLeads||0+' in pipeline',C.red],
-          ['Today Bookings',(d||{}).todayBookings||'\u2014','Confirmed classes',C.text],
+        {[['MTD Revenue',`₱${METRICS.mtdRevenue.toLocaleString()}`,`${pct}% of target`,C.green],
+          ['Active Members',METRICS.active,'5 at risk of churn',C.gold],
+          ['New Leads',METRICS.leads,'This week',C.red],
+          ['Conversion Rate',`${METRICS.conversionRate}%`,`${METRICS.conversions} converted`,C.text],
         ].map(([label,val,sub,color])=>(
           <div key={label} style={metric}>
             <div style={{fontSize:11,color:C.text3,marginBottom:4}}>{label}</div>
@@ -754,567 +677,163 @@ function AdminDashboard(){
       </div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
         <div style={card}>
-          <div style={{fontWeight:600,marginBottom:12,fontSize:14}}>MTD Revenue Progress</div>
-          <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:5}}>
-            <span>{'\u20b1'+((d||{}).monthRevenue||0).toLocaleString()} / \u20b1100,000</span>
-            <span style={{color:C.green}}>{pct}%</span>
-          </div>
-          <div style={{height:8,background:C.elev,borderRadius:4,marginBottom:8}}>
-            <div style={{height:'100%',background:C.green,borderRadius:4,width:pct+'%',transition:'width 0.4s'}}/>
-          </div>
-          <div style={{fontSize:11,color:C.text3}}>Gap: {'\u20b1'+Math.max(0,100000-((d||{}).monthRevenue||0)).toLocaleString()}</div>
+          <div style={{fontWeight:600,marginBottom:14,fontSize:14}}>June Revenue Progress</div>
+          <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:6}}><span>₱{METRICS.mtdRevenue.toLocaleString()} / ₱{METRICS.target.toLocaleString()}</span><span style={{color:C.green}}>{pct}%</span></div>
+          <div style={{height:8,background:C.elev,borderRadius:4,marginBottom:8}}><div style={{height:'100%',background:C.green,borderRadius:4,width:`${pct}%`}}/></div>
+          <div style={{fontSize:12,color:C.text3}}>Gap: ₱{(METRICS.target-METRICS.mtdRevenue).toLocaleString()} · 21 days remaining</div>
         </div>
         <div style={card}>
-          <div style={{fontWeight:600,marginBottom:12,fontSize:14}}>Operations Snapshot</div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
-            {[['Active Coaches',(d||{}).activeCoaches||'\u2014',C.gold],
-              ['Challenges',(d||{}).activeChallenges||'\u2014',C.purple],
-              ['Avg Rating',(d||{}).avgRating||'\u2014',C.green],
-              ['Today Classes',(d||{}).todayBookings||'\u2014',C.text]].map(([l,v,c])=>(
-              <div key={l} style={{background:C.elev,borderRadius:6,padding:'8px 10px'}}>
-                <div style={{fontSize:18,fontWeight:700,color:c}}>{v}</div>
-                <div style={{fontSize:10,color:C.text3}}>{l}</div>
-              </div>
-            ))}
+          <div style={{fontWeight:600,marginBottom:14,fontSize:14}}>Today's Attendance</div>
+          <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:6}}><span>{METRICS.attendanceToday} members in today</span><span style={{color:C.gold}}>{METRICS.attendancePct}% of active</span></div>
+          <div style={{height:8,background:C.elev,borderRadius:4,marginBottom:8}}><div style={{height:'100%',background:C.gold,borderRadius:4,width:`${METRICS.attendancePct}%`}}/></div>
+          <div style={{fontSize:12,color:C.text3}}>Peak hour: 6:00–8:00 PM</div>
+        </div>
+      </div>
+      <div style={card}>
+        <div style={{fontWeight:600,marginBottom:14,fontSize:14}}>At-Risk Members — Needs Attention</div>
+        {MEMBERS.filter(m=>m.status==='At Risk').map(m=>(
+          <div key={m.name} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 0',borderBottom:`1px solid ${C.border}`,fontSize:13}}>
+            <div><div style={{fontWeight:500}}>{m.name}</div><div style={{fontSize:11,color:C.text3}}>{m.coach} · {m.plan} · Last visit: {m.lastVisit}</div></div>
+            <div style={{display:'flex',gap:10,alignItems:'center'}}>
+              <div style={{textAlign:'right'}}><div style={{color:C.red,fontWeight:700}}>{m.attendance}%</div><div style={{fontSize:10,color:C.text3}}>attendance</div></div>
+              <button style={{...btn(C.red),fontSize:11,padding:'5px 10px'}}>Check In</button>
+            </div>
           </div>
-        </div>
-      </div>
-      {((d||{}).recentMembers||[]).length>0&&(
-        <div style={{...card,marginBottom:14}}>
-          <div style={{fontWeight:600,marginBottom:12,fontSize:14}}>Recent Members</div>
-          {((d||{}).recentMembers||[]).map((m,i)=>(
-            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${C.border}`,fontSize:13}}>
-              <div><span style={{fontWeight:500}}>{m.name}</span><span style={{fontSize:11,color:C.text3,marginLeft:8}}>{m.plan} · {m.email}</span></div>
-              <span style={{...bdg(m.status==='Active'?C.green:C.red),fontSize:10}}>{m.status||'Active'}</span>
-            </div>
-          ))}
-        </div>
-      )}
-      {((d||{}).recentLeads||[]).length>0&&(
-        <div style={card}>
-          <div style={{fontWeight:600,marginBottom:12,fontSize:14}}>Recent Leads</div>
-          {((d||{}).recentLeads||[]).map((l,i)=>(
-            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${C.border}`,fontSize:13}}>
-              <div><span style={{fontWeight:500}}>{l.name}</span><span style={{fontSize:11,color:C.text3,marginLeft:8}}>via {l.source} · {l.interestedIn}</span></div>
-              <span style={{...bdg(C.gold),fontSize:10}}>{l.status}</span>
-            </div>
-          ))}
-        </div>
-      )}
-      </>
-      )}
-    </div>
-  );
-}
-
-function AdminPL(){
-  const {data:d,loading,error,refresh}=useGAS('getPL');
-  const [modal,setModal]=useState(false);
-  const today=new Date().toISOString().slice(0,10);
-  const EMPTY={type:'Revenue',category:'Membership',description:'',amount:'',date:today,paymentMethod:'Cash',reference:'',notes:''};
-  const [form,setForm]=useState(EMPTY);
-  const {mutate,loading:saving}=useMutation();
-  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
-  const save=async()=>{await mutate('insert',{sheet:'Transactions',row:form});setModal(false);setForm(EMPTY);refresh();};
-  const mtd=(d||{}).mtd||{};
-  return(
-    <div>
-      <GASNote error={error}/>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:16}}>
-        <div><span style={lbl}>Financials</span><h2 style={{...h2s,marginBottom:0}}>{'P&L Overview'}</h2></div>
-        <button style={{...btn(),fontSize:12,padding:'7px 14px'}} onClick={()=>setModal(true)}>+ Add Transaction</button>
-      </div>
-      <div style={{fontSize:11,color:C.text3,marginBottom:16}}>Month-to-date · {new Date().toLocaleString('en-PH',{month:'long',year:'numeric'})}</div>
-      {loading&&!d?<Spin/>:(
-      <>
-      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:20}}>
-        {[['Revenue','\u20b1'+(mtd.revenue||0).toLocaleString(),C.green],
-          ['Total Expenses','\u20b1'+(mtd.expenses||0).toLocaleString(),C.red],
-          ['Gross Profit','\u20b1'+(mtd.gross||0).toLocaleString(),C.green],
-          ['Net Profit','\u20b1'+(mtd.net||0).toLocaleString(),C.gold],
-        ].map(([l,v,color])=>(
-          <div key={l} style={metric}><div style={{fontSize:11,color:C.text3,marginBottom:4}}>{l}</div><div style={{fontSize:20,fontWeight:700,color}}>{v}</div></div>
         ))}
       </div>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
-        <div style={card}>
-          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Gross Margin</div>
-          <div style={{fontSize:32,fontWeight:800,color:C.green,marginBottom:8}}>{mtd.margin||0}%</div>
-          <div style={{height:5,background:C.elev,borderRadius:3}}><div style={{height:'100%',background:C.green,borderRadius:3,width:Math.min(mtd.margin||0,100)+'%'}}/></div>
-        </div>
-        <div style={card}>
-          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Net Margin (25% tax est.)</div>
-          <div style={{fontSize:32,fontWeight:800,color:C.gold,marginBottom:8}}>{mtd.margin||0}%</div>
-          <div style={{height:5,background:C.elev,borderRadius:3}}><div style={{height:'100%',background:C.gold,borderRadius:3,width:Math.min(mtd.margin||0,100)+'%'}}/></div>
-          <div style={{fontSize:11,color:C.text3,marginTop:8}}>Tax est.: {'\u20b1'+(mtd.tax||0).toLocaleString()}</div>
-        </div>
-      </div>
-      {Object.keys((d||{}).expenseBreakdown||{}).length>0&&(
-        <div style={{...card,marginBottom:14}}>
-          <div style={{fontWeight:600,marginBottom:14,fontSize:13}}>Expense Breakdown (MTD)</div>
-          {Object.entries((d||{}).expenseBreakdown||{}).map(([cat,amt])=>{
-            const total=Object.values((d||{}).expenseBreakdown||{}).reduce((a,b)=>a+b,0);
-            const pct=total?Math.round((amt/total)*100):0;
-            return(
-              <div key={cat} style={{marginBottom:10}}>
-                <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:4}}><span>{cat}</span><span>{'\u20b1'+(amt||0).toLocaleString()+' ('+pct+'%)'}</span></div>
-                <div style={{height:3,background:C.elev,borderRadius:2}}><div style={{height:'100%',background:C.text3,borderRadius:2,width:pct+'%'}}/></div>
-              </div>
-            );
-          })}
-          <div style={{borderTop:`1px solid ${C.border}`,paddingTop:10,marginTop:4,display:'flex',justifyContent:'space-between',fontSize:13,fontWeight:700}}>
-            <span>Total Expenses</span><span style={{color:C.red}}>{'\u20b1'+(mtd.expenses||0).toLocaleString()}</span>
-          </div>
-        </div>
-      )}
-      {((d||{}).recentTransactions||[]).length>0&&(
-        <div style={card}>
-          <div style={{fontWeight:600,marginBottom:12,fontSize:13}}>Recent Transactions</div>
-          {((d||{}).recentTransactions||[]).slice(0,15).map((t,i)=>(
-            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'7px 0',borderBottom:`1px solid ${C.border}`,fontSize:12}}>
-              <div>
-                <span style={{fontWeight:500}}>{t.description}</span>
-                <span style={{fontSize:11,color:C.text3,marginLeft:8}}>{t.category} · {t.date}</span>
-              </div>
-              <span style={{color:t.type==='Revenue'?C.green:C.red,fontWeight:700}}>
-                {(t.type==='Revenue'?'+':'-')+'\u20b1'+parseFloat(t.amount||0).toLocaleString()}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-      </>
-      )}
-      {modal&&(
-        <Modal onClose={()=>setModal(false)} title="Add Transaction">
-          <FR label="Type"><FS v={form.type} sv={sf('type')} opts={['Revenue','Expense']}/></FR>
-          <FR label="Category"><FI v={form.category} sv={sf('category')} ph="e.g. Membership, Rent, Payroll"/></FR>
-          <FR label="Description"><FI v={form.description} sv={sf('description')} ph="Transaction description"/></FR>
-          <FR label="Amount"><FI v={form.amount} sv={sf('amount')} ph="0.00" type="number"/></FR>
-          <FR label="Date"><FI v={form.date} sv={sf('date')} type="date"/></FR>
-          <FR label="Payment Method"><FS v={form.paymentMethod} sv={sf('paymentMethod')} opts={['Cash','GCash','Maya','Card','Bank Transfer','QR Ph']}/></FR>
-          <FR label="Reference"><FI v={form.reference} sv={sf('reference')} ph="Invoice / receipt number"/></FR>
-          <div style={{display:'flex',gap:8,marginTop:6}}>
-            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
-            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Transaction'}</button>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 }
 
 function AdminLeads(){
-  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Leads'});
-  const [modal,setModal]=useState(false);
-  const [editing,setEditing]=useState(null);
-  const today=new Date().toISOString().slice(0,10);
-  const EMPTY={name:'',phone:'',email:'',source:'Facebook',status:'New',interestedIn:'Monthly',dateAdded:today,followUpDate:'',assignedCoach:'',notes:''};
-  const [form,setForm]=useState(EMPTY);
-  const {mutate,loading:saving}=useMutation();
-  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
-  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
-  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
-  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Leads',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
-  const del=async id=>{if(!window.confirm('Delete this lead?'))return;await mutate('delete',{sheet:'Leads',row:{id}});refresh();};
-  const SC={'New':C.text2,'Contacted':C.blue,'Toured':C.purple,'Converted':C.green,'Lost':C.red};
+  const sc={'New Lead':C.text2,'Trial Booked':C.gold,'Assessment Done':C.purple,'Proposal Sent':C.blue,'Converted':C.green,'Lost':C.red};
   return(
     <div>
-      <GASNote error={error}/>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
-        <div><span style={lbl}>CRM</span><h2 style={{...h2s,marginBottom:0}}>Leads Pipeline</h2></div>
-        <button style={{...btn(),fontSize:12,padding:'7px 14px'}} onClick={openAdd}>+ Add Lead</button>
+      <span style={lbl}>CRM</span><h2 style={h2s}>Leads Pipeline</h2>
+      <div style={{display:'flex',gap:8,marginBottom:20,flexWrap:'wrap'}}>
+        {Object.entries(sc).map(([stage,color])=><span key={stage} style={{...bdg(color),fontSize:10}}>{stage}</span>)}
       </div>
-      <div style={{display:'flex',gap:6,marginBottom:16,flexWrap:'wrap'}}>
-        {Object.entries(SC).map(([s,c])=><span key={s} style={{...bdg(c),fontSize:10}}>{s}</span>)}
-      </div>
-      {loading&&!rows?<Spin/>:(rows||[]).map(l=>(
-        <div key={l.id} style={{...card,display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
-          <div style={{width:32,height:32,borderRadius:'50%',background:C.elev,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:11,flexShrink:0}}>
-            {(l.name||'?').split(' ').map(n=>n[0]).join('').slice(0,2)}
-          </div>
-          <div style={{flex:1}}>
-            <div style={{fontWeight:600,fontSize:13}}>{l.name}</div>
-            <div style={{fontSize:11,color:C.text2}}>via {l.source} · {l.interestedIn} · {l.dateAdded}</div>
-          </div>
-          {l.assignedCoach&&<span style={{fontSize:11,color:C.text3}}>{l.assignedCoach}</span>}
-          <span style={{...bdg(SC[l.status]||C.text2),fontSize:10}}>{l.status}</span>
-          <button style={{...btn(C.gold,true),fontSize:11,padding:'4px 8px'}} onClick={()=>openEdit(l)}>Edit</button>
-          <button style={{...btn(C.red,true),fontSize:11,padding:'4px 8px'}} onClick={()=>del(l.id)}>Del</button>
+      {LEADS.map(l=>(
+        <div key={l.name} style={{...card,display:'flex',alignItems:'center',gap:16,marginBottom:10}}>
+          <div style={{width:36,height:36,borderRadius:'50%',background:C.elev,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:12,flexShrink:0}}>{l.name.split(' ').map(n=>n[0]).join('')}</div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14}}>{l.name}</div><div style={{fontSize:12,color:C.text2}}>via {l.source} · {l.date} · {l.interest}</div></div>
+          <span style={{...bdg(sc[l.stage]||C.text2),fontSize:10}}>{l.stage}</span>
+          <button style={{...btn(C.red,true),fontSize:11,padding:'5px 10px'}}>Follow Up</button>
         </div>
       ))}
-      {modal&&(
-        <Modal onClose={()=>setModal(false)} title={editing?'Edit Lead':'Add Lead'}>
-          <FR label="Name"><FI v={form.name} sv={sf('name')} ph="Full name"/></FR>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Phone"><FI v={form.phone} sv={sf('phone')} ph="+63 9XX XXX XXXX"/></FR>
-            <FR label="Email"><FI v={form.email} sv={sf('email')} ph="email@example.com" type="email"/></FR>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Source"><FS v={form.source} sv={sf('source')} opts={['Facebook','Instagram','Walk-in','Referral','Google','Other']}/></FR>
-            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['New','Contacted','Toured','Converted','Lost']}/></FR>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Interested In"><FS v={form.interestedIn} sv={sf('interestedIn')} opts={['Monthly','Quarterly','Annual','Student Monthly','Drop-in']}/></FR>
-            <FR label="Assigned Coach"><FI v={form.assignedCoach} sv={sf('assignedCoach')} ph="Coach name"/></FR>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Date Added"><FI v={form.dateAdded} sv={sf('dateAdded')} type="date"/></FR>
-            <FR label="Follow-up Date"><FI v={form.followUpDate} sv={sf('followUpDate')} type="date"/></FR>
-          </div>
-          <FR label="Notes"><FI v={form.notes} sv={sf('notes')} ph="Any notes..."/></FR>
-          <div style={{display:'flex',gap:8,marginTop:6}}>
-            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
-            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Lead'}</button>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 }
 
 function AdminMembers(){
-  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Members'});
   const [filter,setFilter]=useState('all');
-  const [modal,setModal]=useState(false);
-  const [editing,setEditing]=useState(null);
-  const today=new Date().toISOString().slice(0,10);
-  const EMPTY={name:'',phone:'',email:'',plan:'Monthly',status:'Active',joinDate:today,endDate:'',emergencyContact:'',emergencyPhone:'',notes:''};
-  const [form,setForm]=useState(EMPTY);
-  const {mutate,loading:saving}=useMutation();
-  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
-  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
-  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
-  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Members',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
-  const del=async id=>{if(!window.confirm('Delete this member?'))return;await mutate('delete',{sheet:'Members',row:{id}});refresh();};
-  const filtered=(rows||[]).filter(m=>filter==='all'||m.status===filter);
+  const filtered=filter==='all'?MEMBERS:MEMBERS.filter(m=>m.status===filter);
   return(
     <div>
-      <GASNote error={error}/>
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
         <div><span style={lbl}>CRM</span><h2 style={{...h2s,marginBottom:0}}>Members</h2></div>
         <div style={{display:'flex',gap:8}}>
-          {['all','Active','Inactive'].map(f=>(
-            <button key={f} style={{...btn(C.red,filter!==f),fontSize:12,padding:'6px 12px'}} onClick={()=>setFilter(f)}>{f==='all'?'All':f}</button>
-          ))}
-          <button style={{...btn(),fontSize:12,padding:'6px 12px'}} onClick={openAdd}>+ Add</button>
+          {['all','Active','At Risk'].map(f=><button key={f} style={{...btn(C.red,filter!==f),fontSize:12,padding:'6px 12px'}} onClick={()=>setFilter(f)}>{f==='all'?'All':f}</button>)}
         </div>
       </div>
-      {loading&&!rows?<Spin/>:filtered.map(m=>(
-        <div key={m.id} style={{...card,display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
-          <div style={{width:34,height:34,borderRadius:'50%',background:m.status==='Active'?C.greenDim:C.redDim,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:11,color:m.status==='Active'?C.green:C.red,flexShrink:0}}>
-            {(m.name||'?').split(' ').map(n=>n[0]).join('').slice(0,2)}
-          </div>
-          <div style={{flex:1}}>
-            <div style={{fontWeight:600,fontSize:13}}>{m.name}</div>
-            <div style={{fontSize:11,color:C.text2}}>{m.plan} · {m.email} · Joined {m.joinDate}</div>
-          </div>
-          {m.endDate&&<span style={{fontSize:11,color:C.text3}}>Until {m.endDate}</span>}
-          <span style={{...bdg(m.status==='Active'?C.green:C.red),fontSize:10}}>{m.status}</span>
-          <button style={{...btn(C.gold,true),fontSize:11,padding:'4px 8px'}} onClick={()=>openEdit(m)}>Edit</button>
-          <button style={{...btn(C.red,true),fontSize:11,padding:'4px 8px'}} onClick={()=>del(m.id)}>Del</button>
+      {filtered.map(m=>(
+        <div key={m.name} style={{...card,display:'flex',alignItems:'center',gap:16,marginBottom:10}}>
+          <div style={{width:36,height:36,borderRadius:'50%',background:m.status==='At Risk'?`${C.red}20`:`${C.green}20`,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:12,color:m.status==='At Risk'?C.red:C.green,flexShrink:0}}>{m.name.split(' ').map(n=>n[0]).join('')}</div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14}}>{m.name}</div><div style={{fontSize:12,color:C.text2}}>{m.coach} · {m.plan} · {m.goal} · Last: {m.lastVisit}</div></div>
+          <div style={{textAlign:'right',minWidth:60}}><div style={{fontWeight:700,color:m.attendance<50?C.red:C.text,fontSize:15}}>{m.attendance}%</div><div style={{fontSize:10,color:C.text3}}>attendance</div></div>
+          <span style={{...bdg(m.status==='At Risk'?C.red:C.green),fontSize:10,minWidth:54,textAlign:'center'}}>{m.status}</span>
         </div>
       ))}
-      {modal&&(
-        <Modal onClose={()=>setModal(false)} title={editing?'Edit Member':'Add Member'}>
-          <FR label="Name"><FI v={form.name} sv={sf('name')} ph="Full name"/></FR>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Phone"><FI v={form.phone} sv={sf('phone')} ph="+63 9XX XXX XXXX"/></FR>
-            <FR label="Email"><FI v={form.email} sv={sf('email')} ph="email@example.com" type="email"/></FR>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Plan"><FS v={form.plan} sv={sf('plan')} opts={['Monthly','Quarterly','Annual','Student Monthly','Student Annual','Drop-in']}/></FR>
-            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['Active','Inactive','Frozen','Expired']}/></FR>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Join Date"><FI v={form.joinDate} sv={sf('joinDate')} type="date"/></FR>
-            <FR label="End Date"><FI v={form.endDate} sv={sf('endDate')} type="date"/></FR>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Emergency Contact"><FI v={form.emergencyContact} sv={sf('emergencyContact')} ph="Name"/></FR>
-            <FR label="Emergency Phone"><FI v={form.emergencyPhone} sv={sf('emergencyPhone')} ph="+63 9XX XXX XXXX"/></FR>
-          </div>
-          <FR label="Notes"><FI v={form.notes} sv={sf('notes')} ph="Any notes..."/></FR>
-          <div style={{display:'flex',gap:8,marginTop:6}}>
-            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
-            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Member'}</button>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 }
 
 function AdminCoaches(){
-  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Coaches'});
-  const [modal,setModal]=useState(false);
-  const [editing,setEditing]=useState(null);
-  const today=new Date().toISOString().slice(0,10);
-  const EMPTY={name:'',phone:'',email:'',specialization:'',schedule:'',status:'Active',joinDate:today,bio:'',certifications:'',notes:''};
-  const [form,setForm]=useState(EMPTY);
-  const {mutate,loading:saving}=useMutation();
-  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
-  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
-  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
-  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Coaches',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
-  const del=async id=>{if(!window.confirm('Delete this coach?'))return;await mutate('delete',{sheet:'Coaches',row:{id}});refresh();};
-  const CC=[C.red,C.purple,C.green,C.blue,C.gold];
   return(
     <div>
-      <GASNote error={error}/>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
-        <div><span style={lbl}>Team</span><h2 style={{...h2s,marginBottom:0}}>Coaches</h2></div>
-        <button style={{...btn(),fontSize:12,padding:'7px 14px'}} onClick={openAdd}>+ Add Coach</button>
-      </div>
-      {loading&&!rows?<Spin/>:(
-        <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:14}}>
-          {(rows||[]).map((c,i)=>(
-            <div key={c.id} style={card}>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
-                <div style={{display:'flex',gap:10,alignItems:'center'}}>
-                  <div style={{width:40,height:40,borderRadius:'50%',background:CC[i%5]+'20',border:`2px solid ${CC[i%5]}`,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:13,color:CC[i%5],flexShrink:0}}>
-                    {(c.name||'?').split(' ').map(n=>n[0]).join('').slice(0,2)}
-                  </div>
-                  <div><div style={{fontWeight:700,fontSize:13}}>{c.name}</div><div style={{fontSize:11,color:C.text2}}>{c.specialization}</div></div>
-                </div>
-                <div style={{display:'flex',gap:6}}>
-                  <button style={{...btn(C.gold,true),fontSize:10,padding:'3px 7px'}} onClick={()=>openEdit(c)}>Edit</button>
-                  <button style={{...btn(C.red,true),fontSize:10,padding:'3px 7px'}} onClick={()=>del(c.id)}>Del</button>
-                </div>
-              </div>
-              {c.schedule&&<div style={{fontSize:11,color:C.text3,marginBottom:6}}>{c.schedule}</div>}
-              {c.bio&&<div style={{fontSize:12,color:C.text2,marginBottom:8,lineHeight:1.5}}>{c.bio}</div>}
-              {c.certifications&&<span style={{...bdg(CC[i%5]),fontSize:9}}>{c.certifications}</span>}
+      <span style={lbl}>Team</span><h2 style={h2s}>Coaches</h2>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:14}}>
+        {COACHES.map(c=>(
+          <div key={c.id} style={card}>
+            <div style={{display:'flex',gap:12,marginBottom:14}}>
+              <div style={{width:44,height:44,borderRadius:'50%',background:`${c.color}20`,border:`2px solid ${c.color}`,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:14,color:c.color,flexShrink:0}}>{c.id}</div>
+              <div><div style={{fontWeight:700,fontSize:14}}>{c.name}</div><div style={{fontSize:12,color:C.text2}}>{c.title}</div></div>
             </div>
-          ))}
-        </div>
-      )}
-      {modal&&(
-        <Modal onClose={()=>setModal(false)} title={editing?'Edit Coach':'Add Coach'}>
-          <FR label="Name"><FI v={form.name} sv={sf('name')} ph="Coach full name"/></FR>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Phone"><FI v={form.phone} sv={sf('phone')} ph="+63 9XX XXX XXXX"/></FR>
-            <FR label="Email"><FI v={form.email} sv={sf('email')} ph="coach@irontribe.com" type="email"/></FR>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10,marginBottom:12}}>
+              {[['Members',c.members,C.text],['Retention',`${c.retention}%`,C.green],['Utilization',`${c.utilization}%`,c.color]].map(([l,v,color])=>(
+                <div key={l} style={{background:C.elev,borderRadius:6,padding:'8px'}}><div style={{fontSize:16,fontWeight:700,color}}>{v}</div><div style={{fontSize:10,color:C.text3}}>{l}</div></div>
+              ))}
+            </div>
+            <div style={{height:3,background:C.elev,borderRadius:2}}><div style={{height:'100%',background:c.color,borderRadius:2,width:`${c.utilization}%`}}/></div>
           </div>
-          <FR label="Specialization"><FI v={form.specialization} sv={sf('specialization')} ph="e.g. Strength and Conditioning"/></FR>
-          <FR label="Schedule"><FI v={form.schedule} sv={sf('schedule')} ph="e.g. Mon-Fri 6AM-2PM"/></FR>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['Active','Inactive','On Leave']}/></FR>
-            <FR label="Join Date"><FI v={form.joinDate} sv={sf('joinDate')} type="date"/></FR>
-          </div>
-          <FR label="Bio"><FI v={form.bio} sv={sf('bio')} ph="Brief bio..."/></FR>
-          <FR label="Certifications"><FI v={form.certifications} sv={sf('certifications')} ph="e.g. NSCA-CSCS, RYT-200"/></FR>
-          <div style={{display:'flex',gap:8,marginTop:6}}>
-            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
-            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Coach'}</button>
-          </div>
-        </Modal>
-      )}
+        ))}
+      </div>
     </div>
   );
 }
 
 function AdminBookings(){
-  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Bookings'});
-  const [dayFilter,setDayFilter]=useState('today');
-  const [modal,setModal]=useState(false);
-  const [editing,setEditing]=useState(null);
-  const today=new Date().toISOString().slice(0,10);
-  const EMPTY={memberName:'',coachName:'',class:'',date:today,time:'6:00 AM',duration:'60',status:'Confirmed',notes:''};
-  const [form,setForm]=useState(EMPTY);
-  const {mutate,loading:saving}=useMutation();
-  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
-  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
-  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
-  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Bookings',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
-  const del=async id=>{if(!window.confirm('Delete this booking?'))return;await mutate('delete',{sheet:'Bookings',row:{id}});refresh();};
-  const filtered=(rows||[]).filter(b=>dayFilter==='all'||b.date===today);
-  const SC={Confirmed:C.green,Pending:C.gold,Cancelled:C.red,Completed:C.text2};
   return(
     <div>
-      <GASNote error={error}/>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
-        <div><span style={lbl}>Schedule</span><h2 style={{...h2s,marginBottom:0}}>Bookings</h2></div>
-        <div style={{display:'flex',gap:8}}>
-          {['today','all'].map(f=>(
-            <button key={f} style={{...btn(C.red,dayFilter!==f),fontSize:12,padding:'6px 12px'}} onClick={()=>setDayFilter(f)}>{f==='today'?'Today':'All'}</button>
-          ))}
-          <button style={{...btn(),fontSize:12,padding:'6px 12px'}} onClick={openAdd}>+ Add</button>
-        </div>
-      </div>
-      {loading&&!rows?<Spin/>:filtered.length===0?
-        <div style={{...card,textAlign:'center',color:C.text3,fontSize:13,padding:'32px'}}>No bookings {dayFilter==='today'?'for today':''}</div>
-        :filtered.map(b=>(
-        <div key={b.id} style={{...card,display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
-          <div style={{minWidth:56,textAlign:'center',background:C.elev,borderRadius:8,padding:'6px 8px',flexShrink:0}}>
-            <div style={{fontWeight:700,fontSize:12}}>{b.time}</div>
-            <div style={{fontSize:9,color:C.text3}}>{b.date}</div>
+      <span style={lbl}>Schedule</span><h2 style={h2s}>Class Bookings</h2>
+      {CLASSES.map(cls=>{
+        const pct=Math.round((cls.booked/cls.cap)*100);
+        const full=cls.booked>=cls.cap;
+        return(
+          <div key={cls.name} style={{...card,display:'flex',alignItems:'center',gap:16,marginBottom:10}}>
+            <div style={{minWidth:68,textAlign:'center',background:C.elev,borderRadius:8,padding:'8px 10px'}}><div style={{fontWeight:700,fontSize:13}}>{cls.time}</div><div style={{fontSize:10,color:C.text3}}>{cls.days}</div></div>
+            <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14}}>{cls.name}</div><div style={{fontSize:12,color:C.text2}}>{cls.coach}</div></div>
+            <div style={{minWidth:100}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:C.text2,marginBottom:4}}><span>{cls.booked}/{cls.cap}</span><span style={{color:full?C.red:C.green}}>{full?'FULL':`${100-pct}% open`}</span></div>
+              <div style={{height:3,background:C.elev,borderRadius:2}}><div style={{height:'100%',background:full?C.red:C.green,borderRadius:2,width:`${pct}%`}}/></div>
+            </div>
           </div>
-          <div style={{flex:1}}>
-            <div style={{fontWeight:600,fontSize:13}}>{b.class}</div>
-            <div style={{fontSize:11,color:C.text2}}>{b.memberName} · {b.coachName} · {b.duration} min</div>
-          </div>
-          <span style={{...bdg(SC[b.status]||C.text2),fontSize:10}}>{b.status}</span>
-          <button style={{...btn(C.gold,true),fontSize:11,padding:'4px 8px'}} onClick={()=>openEdit(b)}>Edit</button>
-          <button style={{...btn(C.red,true),fontSize:11,padding:'4px 8px'}} onClick={()=>del(b.id)}>Del</button>
-        </div>
-      ))}
-      {modal&&(
-        <Modal onClose={()=>setModal(false)} title={editing?'Edit Booking':'Add Booking'}>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Member Name"><FI v={form.memberName} sv={sf('memberName')} ph="Member full name"/></FR>
-            <FR label="Coach Name"><FI v={form.coachName} sv={sf('coachName')} ph="Coach name"/></FR>
-          </div>
-          <FR label="Class / Session Type"><FI v={form.class} sv={sf('class')} ph="e.g. Strength Class, Personal Training"/></FR>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Date"><FI v={form.date} sv={sf('date')} type="date"/></FR>
-            <FR label="Time"><FI v={form.time} sv={sf('time')} ph="6:00 AM"/></FR>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Duration (min)"><FI v={form.duration} sv={sf('duration')} ph="60" type="number"/></FR>
-            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['Confirmed','Pending','Cancelled','Completed']}/></FR>
-          </div>
-          <FR label="Notes"><FI v={form.notes} sv={sf('notes')} ph="Any notes..."/></FR>
-          <div style={{display:'flex',gap:8,marginTop:6}}>
-            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
-            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Booking'}</button>
-          </div>
-        </Modal>
-      )}
+        );
+      })}
     </div>
   );
 }
 
 function AdminChallenges(){
-  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Challenges'});
-  const [modal,setModal]=useState(false);
-  const [editing,setEditing]=useState(null);
-  const today=new Date().toISOString().slice(0,10);
-  const EMPTY={title:'',description:'',category:'Physique',startDate:today,endDate:'',maxParticipants:'20',prize:'',status:'Active',notes:''};
-  const [form,setForm]=useState(EMPTY);
-  const {mutate,loading:saving}=useMutation();
-  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
-  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
-  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
-  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Challenges',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
-  const del=async id=>{if(!window.confirm('Delete this challenge?'))return;await mutate('delete',{sheet:'Challenges',row:{id}});refresh();};
   return(
     <div>
-      <GASNote error={error}/>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
-        <div><span style={lbl}>Engagement</span><h2 style={{...h2s,marginBottom:0}}>Challenges</h2></div>
-        <button style={{...btn(),fontSize:12,padding:'7px 14px'}} onClick={openAdd}>+ Add Challenge</button>
-      </div>
-      {loading&&!rows?<Spin/>:(rows||[]).map(ch=>(
-        <div key={ch.id} style={{...card,marginBottom:14}}>
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
-            <div>
-              <div style={{fontWeight:700,fontSize:13}}>{ch.title}</div>
-              <div style={{fontSize:11,color:C.text2}}>{ch.startDate} to {ch.endDate} · {ch.participants||0}/{ch.maxParticipants} participants</div>
-            </div>
-            <div style={{display:'flex',gap:6,alignItems:'center'}}>
-              <span style={{...bdg(ch.status==='Active'?C.green:C.text2),fontSize:10}}>{ch.status}</span>
-              <button style={{...btn(C.gold,true),fontSize:10,padding:'3px 7px'}} onClick={()=>openEdit(ch)}>Edit</button>
-              <button style={{...btn(C.red,true),fontSize:10,padding:'3px 7px'}} onClick={()=>del(ch.id)}>Del</button>
-            </div>
+      <span style={lbl}>Engagement</span><h2 style={h2s}>30-Day Challenges</h2>
+      {CHALLENGES.map(ch=>(
+        <div key={ch.name} style={{...card,marginBottom:14}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:14}}>
+            <div><div style={{fontWeight:700,fontSize:14}}>{ch.name}</div><div style={{fontSize:12,color:C.text2}}>{ch.start} – {ch.end} · {ch.participants} participants</div></div>
+            <span style={{...bdg(ch.status==='Active'?C.green:C.text2),fontSize:10}}>{ch.status}</span>
           </div>
-          {ch.description&&<div style={{fontSize:12,color:C.text2,marginBottom:8}}>{ch.description}</div>}
-          <div style={{display:'flex',gap:20,paddingTop:8,borderTop:`1px solid ${C.border}`}}>
-            {ch.prize&&<div><div style={{fontSize:11,color:C.text3}}>Prize</div><div style={{fontSize:12,fontWeight:600,color:C.gold}}>{ch.prize}</div></div>}
-            {ch.category&&<div><div style={{fontSize:11,color:C.text3}}>Category</div><div style={{fontSize:12,fontWeight:600}}>{ch.category}</div></div>}
+          <div style={{display:'flex',gap:24,padding:'12px 0',borderTop:`1px solid ${C.border}`}}>
+            <div><div style={{fontSize:13,color:C.text3}}>Prize</div><div style={{fontSize:13,fontWeight:600}}>{ch.prize}</div></div>
+            <div><div style={{fontSize:13,color:C.text3}}>Leader</div><div style={{fontSize:13,fontWeight:600,color:C.gold}}>{ch.leader}</div></div>
+            <div><div style={{fontSize:13,color:C.text3}}>Score</div><div style={{fontSize:13,fontWeight:600,color:C.green}}>{ch.score}/100</div></div>
           </div>
         </div>
       ))}
-      {modal&&(
-        <Modal onClose={()=>setModal(false)} title={editing?'Edit Challenge':'Add Challenge'}>
-          <FR label="Title"><FI v={form.title} sv={sf('title')} ph="Challenge name"/></FR>
-          <FR label="Description"><FI v={form.description} sv={sf('description')} ph="What is this challenge?"/></FR>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Category"><FS v={form.category} sv={sf('category')} opts={['Physique','Strength','Endurance','Nutrition','Consistency','Mixed']}/></FR>
-            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['Active','Upcoming','Completed','Cancelled']}/></FR>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Start Date"><FI v={form.startDate} sv={sf('startDate')} type="date"/></FR>
-            <FR label="End Date"><FI v={form.endDate} sv={sf('endDate')} type="date"/></FR>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Max Participants"><FI v={form.maxParticipants} sv={sf('maxParticipants')} ph="20" type="number"/></FR>
-            <FR label="Prize"><FI v={form.prize} sv={sf('prize')} ph="e.g. Free month + merch"/></FR>
-          </div>
-          <div style={{display:'flex',gap:8,marginTop:6}}>
-            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
-            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Challenge'}</button>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 }
 
 function AdminReviews(){
-  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Reviews'});
-  const [modal,setModal]=useState(false);
-  const [editing,setEditing]=useState(null);
-  const today=new Date().toISOString().slice(0,10);
-  const EMPTY={memberName:'',memberEmail:'',rating:'5',text:'',platform:'Google',date:today,status:'Published',response:''};
-  const [form,setForm]=useState(EMPTY);
-  const {mutate,loading:saving}=useMutation();
-  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
-  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
-  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
-  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Reviews',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
-  const del=async id=>{if(!window.confirm('Delete this review?'))return;await mutate('delete',{sheet:'Reviews',row:{id}});refresh();};
-  const avg=(rows||[]).length?((rows||[]).reduce((s,r)=>s+parseFloat(r.rating||0),0)/(rows||[]).length).toFixed(1):'--';
   return(
     <div>
-      <GASNote error={error}/>
-      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
-        <div><span style={lbl}>Reputation</span><h2 style={{...h2s,marginBottom:0}}>Member Reviews</h2></div>
-        <button style={{...btn(),fontSize:12,padding:'7px 14px'}} onClick={openAdd}>+ Add Review</button>
-      </div>
+      <span style={lbl}>Reputation</span><h2 style={h2s}>Member Reviews</h2>
       <div style={{...metric,marginBottom:20,display:'flex',gap:32}}>
-        <div><div style={{fontSize:32,fontWeight:700,color:C.gold}}>{avg}</div><div style={{fontSize:11,color:C.text3}}>Avg Rating</div></div>
-        <div><div style={{fontSize:32,fontWeight:700}}>{(rows||[]).length}</div><div style={{fontSize:11,color:C.text3}}>Total Reviews</div></div>
-        <div><div style={{fontSize:32,fontWeight:700,color:C.green}}>{(rows||[]).filter(r=>r.status==='Published').length}</div><div style={{fontSize:11,color:C.text3}}>Published</div></div>
+        <div><div style={{fontSize:36,fontWeight:700,color:C.gold}}>4.9</div><div style={{fontSize:12,color:C.text3}}>Avg Rating</div></div>
+        <div><div style={{fontSize:36,fontWeight:700}}>{REVIEWS.length}</div><div style={{fontSize:12,color:C.text3}}>Reviews</div></div>
+        <div><div style={{fontSize:36,fontWeight:700,color:C.green}}>100%</div><div style={{fontSize:12,color:C.text3}}>Recommend</div></div>
       </div>
-      {loading&&!rows?<Spin/>:(rows||[]).map(r=>(
-        <div key={r.id} style={{...card,marginBottom:10}}>
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
-            <div>
-              <div style={{fontWeight:600,fontSize:13}}>{r.memberName}</div>
-              <div style={{fontSize:11,color:C.text3}}>{r.platform} · {r.date}</div>
-            </div>
-            <div style={{display:'flex',gap:6,alignItems:'center'}}>
-              <span style={{fontSize:13,color:C.gold}}>{'\u2605'.repeat(Math.round(parseFloat(r.rating||0)))}</span>
-              <span style={{...bdg(r.status==='Published'?C.green:C.text3),fontSize:9}}>{r.status}</span>
-              <button style={{...btn(C.gold,true),fontSize:10,padding:'3px 7px'}} onClick={()=>openEdit(r)}>Edit</button>
-              <button style={{...btn(C.red,true),fontSize:10,padding:'3px 7px'}} onClick={()=>del(r.id)}>Del</button>
-            </div>
+      {REVIEWS.map(r=>(
+        <div key={r.name} style={{...card,marginBottom:10}}>
+          <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
+            <div style={{fontWeight:600,fontSize:14}}>{r.name}</div>
+            <div style={{display:'flex',alignItems:'center',gap:8}}><span style={{fontSize:13,color:C.gold}}>{'★'.repeat(r.rating)}</span><span style={{fontSize:11,color:C.text3}}>{r.date}</span></div>
           </div>
-          <p style={{fontSize:12,color:C.text2,lineHeight:1.6,marginBottom:r.response?6:0}}>{r.text}</p>
-          {r.response&&<div style={{background:C.elev,borderRadius:6,padding:'8px 10px',fontSize:11,color:C.text3,borderLeft:`2px solid ${C.gold}`}}>{r.response}</div>}
+          <p style={{fontSize:13,color:C.text2,lineHeight:1.6,marginBottom:8}}>{r.text}</p>
+          <span style={{...bdg(C.text3),fontSize:10}}>{r.plan}</span>
         </div>
       ))}
-      {modal&&(
-        <Modal onClose={()=>setModal(false)} title={editing?'Edit Review':'Add Review'}>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-            <FR label="Member Name"><FI v={form.memberName} sv={sf('memberName')} ph="Full name"/></FR>
-            <FR label="Email"><FI v={form.memberEmail} sv={sf('memberEmail')} ph="email@example.com" type="email"/></FR>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10}}>
-            <FR label="Rating"><FS v={form.rating} sv={sf('rating')} opts={['5','4','3','2','1']}/></FR>
-            <FR label="Platform"><FS v={form.platform} sv={sf('platform')} opts={['Google','Facebook','Walk-in','Instagram','Other']}/></FR>
-            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['Published','Pending','Hidden']}/></FR>
-          </div>
-          <FR label="Review Text"><FI v={form.text} sv={sf('text')} ph="What the member said..."/></FR>
-          <FR label="Date"><FI v={form.date} sv={sf('date')} type="date"/></FR>
-          <FR label="Our Response (optional)"><FI v={form.response} sv={sf('response')} ph="Response to this review..."/></FR>
-          <div style={{display:'flex',gap:8,marginTop:6}}>
-            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
-            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Review'}</button>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 }
@@ -1332,7 +851,7 @@ function AdminMarketing(){
         ))}
       </div>
       {active&&(
-        <div style={{...card,background:'#0A0908'}}>
+        <div style={{...card,background:'#08080C'}}>
           <div style={{display:'flex',justifyContent:'space-between',marginBottom:10}}>
             <span style={{...bdg(C.red),fontSize:10}}>{active.toUpperCase()}</span>
             <span style={{fontSize:11,color:C.text3}}>{running?'Generating...':'Done'}</span>
@@ -1345,63 +864,40 @@ function AdminMarketing(){
 }
 
 function AdminIntelligence(){
-  const {data:dash,loading:dL,error:dE}=useGAS('getDashboard');
-  const {data:pl,loading:pL}=useGAS('getPL');
-  const mtd=(pl||{}).mtd||{};
-  const d=dash||{};
-  const pct=d.monthRevenue?Math.min(100,Math.round((d.monthRevenue/100000)*100)):0;
+  const pct=Math.round((METRICS.mtdRevenue/METRICS.target)*100);
   return(
     <div>
-      <GASNote error={dE}/>
       <span style={lbl}>Analytics</span><h2 style={h2s}>Business Intelligence</h2>
-      {(dL&&!dash)||(pL&&!pl)?<Spin/>:(
-      <>
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:20}}>
-        {[['Revenue MTD','\u20b1'+(d.monthRevenue||0).toLocaleString(),C.green],
-          ['Target','\u20b1100,000',C.text2],
-          ['Progress',pct+'%',C.gold],
-          ['Active Members',d.activeMembers||'\u2014',C.text],
-          ['Open Leads',d.openLeads||'\u2014',C.red],
-          ['Avg Rating',d.avgRating||'\u2014',C.green],
-        ].map(([l,v,color])=>(
-          <div key={l} style={metric}><div style={{fontSize:11,color:C.text3,marginBottom:4}}>{l}</div><div style={{fontSize:22,fontWeight:700,color}}>{v}</div></div>
+        {[['Revenue MTD',`₱${METRICS.mtdRevenue.toLocaleString()}`,C.green],['Target',`₱${METRICS.target.toLocaleString()}`,C.text2],['Progress',`${pct}%`,C.gold],
+          ['Active Members',METRICS.active,C.text],['At-Risk',METRICS.atRisk,C.red],['Conversion',`${METRICS.conversionRate}%`,C.green]].map(([l,v,color])=>(
+          <div key={l} style={metric}><div style={{fontSize:11,color:C.text3,marginBottom:4}}>{l}</div><div style={{fontSize:24,fontWeight:700,color}}>{v}</div></div>
         ))}
       </div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
         <div style={card}>
-          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Revenue vs. Target</div>
-          <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:5}}>
-            <span>{'\u20b1'+(d.monthRevenue||0).toLocaleString()}</span><span>{pct}%</span>
-          </div>
-          <div style={{height:5,background:C.elev,borderRadius:3,marginBottom:14}}>
-            <div style={{height:'100%',background:pct>=100?C.green:C.gold,borderRadius:3,width:pct+'%'}}/>
-          </div>
-          <div style={{fontWeight:600,marginBottom:8,fontSize:13}}>P&L Summary (MTD)</div>
-          {[['Revenue','\u20b1'+(mtd.revenue||0).toLocaleString(),C.green],
-            ['Expenses','\u20b1'+(mtd.expenses||0).toLocaleString(),C.red],
-            ['Net Profit','\u20b1'+(mtd.net||0).toLocaleString(),C.gold]].map(([l,v,c])=>(
-            <div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:12,padding:'5px 0',borderBottom:`1px solid ${C.border}`}}>
-              <span style={{color:C.text2}}>{l}</span><span style={{color:c,fontWeight:600}}>{v}</span>
-            </div>
-          ))}
-        </div>
-        <div style={card}>
-          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Monthly Revenue Trend</div>
-          {((pl||{}).trend||[]).map((t,i)=>{
-            const maxR=Math.max(...((pl||{}).trend||[{revenue:1}]).map(x=>x.revenue||0),1);
+          <div style={{fontWeight:600,marginBottom:14,fontSize:13}}>Revenue by Coach Roster</div>
+          {COACHES.map(c=>{
+            const rev=c.members*999;
+            const maxRev=Math.max(...COACHES.map(x=>x.members*999));
             return(
-              <div key={i} style={{marginBottom:8}}>
-                <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:C.text2,marginBottom:3}}>
-                  <span>{t.month}</span><span>{'\u20b1'+(t.revenue||0).toLocaleString()}</span>
-                </div>
-                <div style={{height:3,background:C.elev,borderRadius:2}}><div style={{height:'100%',background:C.green,borderRadius:2,width:Math.round(((t.revenue||0)/maxR)*100)+'%'}}/></div>
+              <div key={c.id} style={{marginBottom:10}}>
+                <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:4}}><span>{c.name.split(' ')[1]}</span><span>₱{rev.toLocaleString()}</span></div>
+                <div style={{height:3,background:C.elev,borderRadius:2}}><div style={{height:'100%',background:c.color,borderRadius:2,width:`${Math.round((rev/maxRev)*100)}%`}}/></div>
               </div>
             );
           })}
         </div>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:14,fontSize:13}}>Plan Distribution</div>
+          {[['Regular Monthly',42,C.red],['Annual',28,C.gold],['Student Monthly',30,C.purple]].map(([plan,p,color])=>(
+            <div key={plan} style={{marginBottom:10}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:4}}><span>{plan}</span><span>{p}%</span></div>
+              <div style={{height:3,background:C.elev,borderRadius:2}}><div style={{height:'100%',background:color,borderRadius:2,width:`${p}%`}}/></div>
+            </div>
+          ))}
+        </div>
       </div>
-      </>
-      )}
     </div>
   );
 }
@@ -1409,21 +905,24 @@ function AdminIntelligence(){
 function AdminAIConsole(){
   const [query,setQuery]=useState(null);
   const {display,running,startTyping}=useTypewriter(10);
-  const run=(type)=>{setQuery(type);setTimeout(()=>startTyping(AI_OUTPUTS[type]),800);};
+  const run=(type)=>{
+    setQuery(type);
+    setTimeout(()=>startTyping(AI_OUTPUTS[type]),800);
+  };
   return(
     <div>
       <span style={lbl}>Intelligence</span><h2 style={h2s}>AI Console</h2>
-      <p style={{color:C.text2,fontSize:14,marginBottom:20}}>Run AI-powered analysis on Iron Tribe data. Select a query to generate insights.</p>
+      <p style={{color:C.text2,fontSize:14,marginBottom:20}}>Run AI-powered analysis on Iron Tribe live data. Select a query to generate insights.</p>
       <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10,marginBottom:20}}>
         {[['retention','Retention Analysis'],['revenue','Revenue Intelligence'],['leads','Lead Intelligence']].map(([type,label])=>(
           <button key={type} style={{...btn(C.red,query!==type),padding:'12px 16px',fontSize:13}} onClick={()=>run(type)}>{label}</button>
         ))}
       </div>
       {query&&(
-        <div style={{...card,background:'#0A0908'}}>
+        <div style={{...card,background:'#08080C'}}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
             <span style={{...bdg(C.red),fontSize:10}}>AI ANALYSIS</span>
-            <span style={{fontSize:11,color:C.text3}}>{running?'Analyzing data...':'Analysis complete'}</span>
+            <span style={{fontSize:11,color:C.text3}}>{running?'Analyzing Iron Tribe data...':'Analysis complete'}</span>
           </div>
           <pre style={{fontSize:13,color:C.text2,whiteSpace:'pre-wrap',lineHeight:1.7,fontFamily:'inherit'}}>{display}{running?'|':''}</pre>
         </div>
@@ -1433,47 +932,78 @@ function AdminAIConsole(){
 }
 
 function AdminSettings(){
-  const {data:settings,loading,error,refresh}=useGAS('getSettings');
-  const [form,setForm]=useState({});
-  const {mutate,loading:saving}=useMutation();
-  useEffect(()=>{if(settings)setForm({...settings});},[JSON.stringify(settings)]);
-  const sf=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
-  const save=async()=>{await mutate('saveSettings',{settings:form});refresh();};
-  const groups=[
-    {label:'Gym Information',keys:['gymName','address','phone','email','facebook','instagram']},
-    {label:'Business Hours',keys:['openTime','closeTime']},
-    {label:'Membership Pricing',keys:['monthlyPlan','quarterlyPlan','annualPlan']},
-    {label:'System',keys:['currency','taxRate','pinCode']},
-  ];
-  const labels={gymName:'Gym Name',address:'Address',phone:'Phone',email:'Email',facebook:'Facebook URL',instagram:'Instagram URL',openTime:'Opening Time',closeTime:'Closing Time',monthlyPlan:'Monthly Plan (PHP)',quarterlyPlan:'Quarterly Plan (PHP)',annualPlan:'Annual Plan (PHP)',currency:'Currency',taxRate:'Tax Rate (decimal)',pinCode:'Operator PIN'};
   return(
     <div>
-      <GASNote error={error}/>
       <span style={lbl}>Configuration</span><h2 style={h2s}>Settings</h2>
-      {loading&&!settings?<Spin/>:(
       <div style={{display:'flex',flexDirection:'column',gap:14}}>
-        {groups.map(g=>(
-          <div key={g.label} style={card}>
-            <div style={{fontWeight:600,marginBottom:14,fontSize:14}}>{g.label}</div>
+        {[{label:'Gym Information',fields:[['Gym Name','Iron Tribe Fitness Gym'],['Address','4F Noli Rose Bldg, 474 J.P. Laurel Hwy, Malvar, Batangas'],['Phone','+63 956 700 7785'],['Business Hours','8:00 AM – 10:00 PM daily']]},
+          {label:'Membership Pricing',fields:[['Student Monthly','799'],['Regular Monthly','999'],['Annual Regular','8000'],['Annual Student','6000']]},
+        ].map(group=>(
+          <div key={group.label} style={card}>
+            <div style={{fontWeight:600,marginBottom:16,fontSize:14}}>{group.label}</div>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
-              {g.keys.map(k=>(
-                <div key={k}>
-                  <div style={{fontSize:11,color:C.text2,marginBottom:5,textTransform:'uppercase',letterSpacing:'0.05em',fontWeight:600}}>{labels[k]||k}</div>
-                  <input value={form[k]||''} onChange={sf(k)} style={{fontSize:13}} type={k==='pinCode'?'password':'text'}/>
-                </div>
+              {group.fields.map(([label,val])=>(
+                <div key={label}><div style={{fontSize:12,color:C.text2,marginBottom:6}}>{label}</div><input defaultValue={val} style={{fontSize:13}}/></div>
               ))}
             </div>
+            <button style={{...btn(),marginTop:14,fontSize:13,padding:'8px 16px'}}>Save Changes</button>
           </div>
         ))}
-        <button style={{...btn(),fontSize:13,padding:'10px 20px',alignSelf:'flex-start'}} onClick={save} disabled={saving}>
-          {saving?'Saving...':'Save All Settings'}
-        </button>
       </div>
-      )}
     </div>
   );
 }
 
+function AdminPL(){
+  const revenue=METRICS.mtdRevenue;
+  const exp={Rent:25000,Salaries:35000,Utilities:8000,Supplies:3500,Marketing:5000};
+  const totalExp=Object.values(exp).reduce((a,b)=>a+b,0);
+  const grossProfit=revenue-totalExp;
+  const taxEst=Math.round(grossProfit*0.25);
+  const netProfit=grossProfit-taxEst;
+  const grossMargin=Math.round((grossProfit/revenue)*100);
+  const netMargin=Math.round((netProfit/revenue)*100);
+  return(
+    <div>
+      <span style={lbl}>Financials</span><h2 style={h2s}>{'P&L Overview'}</h2>
+      <div style={{fontSize:11,color:C.text3,marginBottom:20}}>Month-to-date · June 2026 · 17 days in</div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:20}}>
+        {[['Revenue',`₱${revenue.toLocaleString()}`,C.green],['Total Expenses',`₱${totalExp.toLocaleString()}`,C.red],['Gross Profit',`₱${grossProfit.toLocaleString()}`,C.green],['Net Profit',`₱${netProfit.toLocaleString()}`,C.gold]].map(([l,v,color])=>(
+          <div key={l} style={metric}><div style={{fontSize:11,color:C.text3,marginBottom:4}}>{l}</div><div style={{fontSize:20,fontWeight:700,color}}>{v}</div></div>
+        ))}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:20}}>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Gross Margin</div>
+          <div style={{fontSize:36,fontWeight:800,color:C.green,marginBottom:8}}>{grossMargin}%</div>
+          <div style={{height:6,background:C.elev,borderRadius:3}}><div style={{height:'100%',background:C.green,borderRadius:3,width:`${grossMargin}%`}}/></div>
+          <div style={{fontSize:11,color:C.text3,marginTop:8}}>Revenue minus operating expenses</div>
+        </div>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Net Margin (after 25% tax est.)</div>
+          <div style={{fontSize:36,fontWeight:800,color:C.gold,marginBottom:8}}>{netMargin}%</div>
+          <div style={{height:6,background:C.elev,borderRadius:3}}><div style={{height:'100%',background:C.gold,borderRadius:3,width:`${netMargin}%`}}/></div>
+          <div style={{fontSize:11,color:C.text3,marginTop:8}}>Net: ₱{netProfit.toLocaleString()} after ₱{taxEst.toLocaleString()} estimated tax</div>
+        </div>
+      </div>
+      <div style={card}>
+        <div style={{fontWeight:600,marginBottom:16,fontSize:13}}>Expense Breakdown</div>
+        {Object.entries(exp).map(([key,val])=>{
+          const pct=Math.round((val/totalExp)*100);
+          return(
+            <div key={key} style={{marginBottom:12}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:4}}><span>{key}</span><span>₱{val.toLocaleString()} ({pct}%)</span></div>
+              <div style={{height:3,background:C.elev,borderRadius:2}}><div style={{height:'100%',background:C.text3,borderRadius:2,width:`${pct}%`}}/></div>
+            </div>
+          );
+        })}
+        <div style={{borderTop:`1px solid ${C.border}`,paddingTop:12,marginTop:4,display:'flex',justifyContent:'space-between',fontSize:13,fontWeight:700}}>
+          <span>Total</span><span style={{color:C.red}}>₱{totalExp.toLocaleString()}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function AdminSuite(){
   const [unlocked,setUnlocked]=useState(false);
@@ -1495,7 +1025,7 @@ function AdminSuite(){
   const Panel=panels[panel]||AdminDashboard;
   return(
     <div style={{display:'flex',height:'calc(100vh - 56px)'}}>
-      <div style={{width:200,background:'#060604',borderRight:`1px solid ${C.border}`,padding:'16px 10px',flexShrink:0,overflowY:'auto'}}>
+      <div style={{width:200,background:'#050507',borderRight:`1px solid ${C.border}`,padding:'16px 10px',flexShrink:0,overflowY:'auto'}}>
         {nav.map(([k,l])=>(
           <div key={k} onClick={()=>setPanel(k)} style={{padding:'9px 12px',borderRadius:8,marginBottom:3,cursor:'pointer',fontSize:13,background:panel===k?C.redDim:'transparent',color:panel===k?C.red:C.text2,fontWeight:panel===k?600:400,userSelect:'none'}}>{l}</div>
         ))}
@@ -1507,7 +1037,7 @@ function AdminSuite(){
 
 function Footer({goTo}){
   return(
-    <footer style={{background:'#060604',borderTop:`1px solid ${C.border}`,padding:'36px 28px 24px'}}>
+    <footer style={{background:'#050507',borderTop:`1px solid ${C.border}`,padding:'36px 28px 24px'}}>
       <div style={{maxWidth:1100,margin:'0 auto',display:'grid',gridTemplateColumns:'1.5fr 1fr 1fr',gap:32,marginBottom:24}}>
         <div>
           <div style={{...DISPLAY,color:C.red,fontSize:20,marginBottom:10}}>IRON TRIBE FITNESS GYM</div>
