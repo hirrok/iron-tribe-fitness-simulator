@@ -9,7 +9,7 @@ A premium fitness business infrastructure demo for Iron Tribe Fitness Gym, Malva
 ## What's Inside
 - **10 public pages** — Home, Memberships, Coaching, Classes, Transformations, About, Contact, Join Now, Success Stories, FAQ
 - **12 admin modules** — Dashboard, Leads Pipeline, Member CRM, Coaches, Membership Pipeline, Bookings, Challenges, Reviews, Marketing, Business Intelligence, AI Console, Settings
-- Full dark mode, Philippine pricing (₱), Filipino mock data, local payment UI (GCash / Maya / Card / QR Ph)
+- Full dark mode, USD-normalized demo pricing, Filipino mock data, local payment UI (GCash / Maya / Card / QR Ph)
 
 ## Foundry Docs
 - `recon.md` — Business recon and gap analysis
@@ -26,3 +26,8 @@ A premium fitness business infrastructure demo for Iron Tribe Fitness Gym, Malva
 
 ---
 Built by [Aurora Digital Foundry](https://github.com/hirrok/adf-hq)
+
+
+## Currency standard
+
+Active demo and operator surfaces use USD. Legacy Philippine-peso demo values were normalized on 2026-09-27 using the fixed reference 1 Philippine peso = 0.0160393 USD.

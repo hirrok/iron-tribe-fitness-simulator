@@ -1,3 +1,5 @@
+> **Currency presentation note:** USD equivalents normalized on 2026-09-27 from legacy Philippine-peso demo/source values using 1 Philippine peso = 0.0160393 USD. This is a presentation standard, not live FX.
+
 # Iron Tribe Fitness — Prototype Plan
 **Aurora Digital Foundry | Foundry Lifecycle Stage: Prototype**
 **Date:** June 2026 | **Output:** Demo-ready simulator + Astro repo scaffold
@@ -78,10 +80,10 @@ Filipino names, real Malvar/Batangas context. Mix of student and regular plans. 
 ### Leads (18 records in pipeline)
 Distributed across all 7 stages. Mix of Facebook, Instagram, referral, walk-in sources.
 
-### Revenue (PHP)
-- MTD Revenue: ₱87,500
+### Revenue (USD)
+- MTD Revenue: $1,403
 - Active Members: 67
-- Monthly run-rate implied: ~₱95,000–₱110,000
+- Monthly run-rate implied: ~$1,524–$1,764
 
 ### Classes (weekly schedule)
 8 class slots across 4 types, Mon–Sat schedule.

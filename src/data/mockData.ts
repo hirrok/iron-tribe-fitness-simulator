@@ -1,5 +1,6 @@
 // Iron Tribe Fitness Gym — Mock Data
 // Aurora Digital Foundry | Data Spine
+// Currency: USD — normalized 2026-09-27 from legacy PHP demo values
 
 export const GYM_INFO = {
   name: 'Iron Tribe Fitness Gym',
@@ -12,10 +13,10 @@ export const GYM_INFO = {
 };
 
 export const PRICING = {
-  studentMonthly: 799,
-  regularMonthly: 999,
-  annualRegular: 8000,
-  annualStudent: 6000,
+  studentMonthly: 12.81,
+  regularMonthly: 16.02,
+  annualRegular: 128.31,
+  annualStudent: 96.24,
 };
 
 export const COACHES = [
@@ -87,8 +88,8 @@ export const MEMBERS = [
 ];
 
 export const METRICS = {
-  mtdRevenue: 87500,
-  revenueTarget: 100000,
+  mtdRevenue: 1403.44,
+  revenueTarget: 1603.93,
   activeMembers: 67,
   atRiskMembers: 5,
   newLeads: 7,

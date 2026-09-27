@@ -1,3 +1,5 @@
+> **Currency presentation note:** USD equivalents normalized on 2026-09-27 from legacy Philippine-peso demo/source values using 1 Philippine peso = 0.0160393 USD. This is a presentation standard, not live FX.
+
 # Iron Tribe Fitness Gym — Foundry Assessment
 **Aurora Digital Foundry | Foundry Lifecycle Stage: Assessment**
 **Date:** June 2026 | **Assessor:** First Mate / AI Chief of Staff
@@ -143,7 +145,7 @@ What it doesn't have — yet — is the infrastructure to convert its brand warm
 
 **Infrastructure ROI Potential: EXTREMELY HIGH.**
 
-The delta between a ₱35k/month gym running on DMs and a ₱150k+/month gym running on a full digital operating system is almost entirely an infrastructure gap.
+The delta between a $0.56k/month gym running on DMs and a $2.41k+/month gym running on a full digital operating system is almost entirely an infrastructure gap.
 
 ---
 

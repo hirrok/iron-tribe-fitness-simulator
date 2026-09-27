@@ -1,3 +1,5 @@
+> **Currency presentation note:** USD equivalents normalized on 2026-09-27 from legacy Philippine-peso demo/source values using 1 Philippine peso = 0.0160393 USD. This is a presentation standard, not live FX.
+
 # Iron Tribe Fitness Gym — Recon Report
 **Aurora Digital Foundry | Foundry Lifecycle Stage: Recon**
 **Date:** June 2026 | **Class:** B — Revenue | **Operator:** Premium Demo (Direct Relationship)
@@ -29,7 +31,7 @@ The gym's digital presence lives almost entirely on Facebook and Instagram. Face
 **Offer stack (publicly discoverable):**
 - Monthly membership (price post-March 2026 update unconfirmed)
 - Free body assessment / body composition assessment
-- Annual membership: ₱8,000 regular / ₱6,000 student (freeze policy: 2x/year, max 1 month each)
+- Annual membership: $128 regular / $96.24 student (freeze policy: 2x/year, max 1 month each)
 - Twice-weekly coach check-ins referenced in indexed posts
 - Daily and weekly access options (exact prices unconfirmed post-March 2026)
 
