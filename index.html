@@ -94,12 +94,14 @@ const LEADS=[
   {name:'Anna Villanueva',source:'Walk-in',stage:'New Lead',date:'Jun 9',interest:'Regular Monthly'},
 ];
 
-const METRICS={mtdRevenue:87500,target:100000,active:67,atRisk:5,leads:7,trials:4,conversions:11,conversionRate:73,attendanceToday:31,attendancePct:46};
+const PHP_TO_USD=0.0160393;
+const USD_TO_PHP=1/PHP_TO_USD;
+const usd=n=>'{mtdRevenue:87500,target:100000,active:67,atRisk:5,leads:7,trials:4,conversions:11,conversionRate:73,attendanceToday:31,attendancePct:46};
 
 const REVIEWS=[
   {name:'Maria Santos',rating:5,date:'Jun 5',text:'Coach Ana completely changed how I think about training. Down 6kg in 3 months and I actually understand why. The check-ins keep me accountable like nothing else has.',plan:'Regular Monthly'},
   {name:'Carlo Reyes',rating:5,date:'May 28',text:"Hit a 100kg squat for the first time yesterday. Coach Jun's programming is systematic and it works. This gym is the real deal.",plan:'Annual'},
-  {name:'Jennica Aquino',rating:5,date:'Jun 1',text:"As a student I was worried about the cost but the student plan is worth every peso. The body scan every month shows the actual progress — not just the scale.",plan:'Student Monthly'},
+  {name:'Jennica Aquino',rating:5,date:'Jun 1',text:"As a student I was worried about the cost but the student plan is worth every cent. The body scan every month shows the actual progress — not just the scale.",plan:'Student Monthly'},
   {name:'Jason Bautista',rating:5,date:'Jun 3',text:"I've tried 3 gyms in Batangas. None of them had this level of structure and coaching. Iron Tribe is in a different category.",plan:'Annual'},
   {name:'Liza Torres',rating:4,date:'May 20',text:"Coach Rica's HIIT class is unreal. I book 2 weeks in advance because it fills up so fast. Would recommend to anyone who wants to actually sweat.",plan:'Regular Monthly'},
 ];
@@ -112,7 +114,7 @@ const CHALLENGES=[
 
 const FAQ_ITEMS=[
   {q:'What is included in the free body assessment?',a:'Full body composition scan (weight, BMI, muscle mass, body fat %), a 15-minute consultation with your assigned coach, a recommended program based on your goals, and a plan recommendation. No commitment required.'},
-  {q:'How much does membership cost?',a:'Student Monthly: ₱799/month (valid student ID required). Regular Monthly: ₱999/month. Annual Regular: ₱8,000/year. Annual Student: ₱6,000/year. All plans include unlimited gym access, free body assessment, and twice-weekly coach check-ins.'},
+  {q:'How much does membership cost?',a:'Student Monthly: $12.82/month (valid student ID required). Regular Monthly: $16.02/month. Annual Regular: $128/year. Annual Student: $96.24/year. All plans include unlimited gym access, free body assessment, and twice-weekly coach check-ins.'},
   {q:'What are your business hours?',a:"We're open Monday through Sunday, 8:00 AM to 10:00 PM daily. Holiday hours may vary — we'll post any changes on our Facebook and Instagram pages."},
   {q:'Can I freeze my membership?',a:'Yes. All plans allow you to freeze your membership up to 2 times per year, for a maximum of 1 month per freeze. Just notify us before your freeze period starts.'},
   {q:'Do I need to book classes in advance?',a:"We recommend booking in advance for popular classes, especially Coach Rica's Evening HIIT sessions, which regularly fill up. Regular and Annual members get priority booking."},
@@ -317,7 +319,7 @@ function HomePage({goTo}){
               <div key={p.name} style={{...card,border:`2px solid ${p.color}`,position:'relative'}}>
                 {p.tag&&<div style={{...bdg(p.color===C.border?C.text2:p.color),position:'absolute',top:-10,left:16,fontSize:10}}>{p.tag}</div>}
                 <div style={{fontSize:13,color:C.text2,marginBottom:4}}>{p.name}</div>
-                <div style={{fontSize:30,fontWeight:800}}>₱{p.price}<span style={{fontSize:13,fontWeight:400,color:C.text2}}>{p.per}</span></div>
+                <div style={{fontSize:30,fontWeight:800}}>{usd(p.price)}<span style={{fontSize:13,fontWeight:400,color:C.text2}}>{p.per}</span></div>
                 <button style={{...btn(p.color===C.border?C.red:p.color),width:'100%',marginTop:14,fontSize:13}} onClick={()=>goTo('join')}>Get Started</button>
               </div>
             ))}
@@ -338,8 +340,8 @@ function MembershipsPage({goTo}){
   const plans=[
     {name:'Student Monthly',price:799,per:'month',color:C.purple,includes:['Unlimited gym access','Free body assessment','Coach check-ins 2x/week','Class booking access','Student ID required']},
     {name:'Regular Monthly',price:999,per:'month',color:C.red,featured:true,includes:['Everything in Student','Priority class booking','Monthly progress report','Nutrition guidance','No student ID required']},
-    {name:'Annual Regular',price:8000,per:'year',color:C.gold,includes:['Everything in Regular','2x free body comp scans','Annual progress review','Save ₱3,988 vs monthly','Priority coach access']},
-    {name:'Annual Student',price:6000,per:'year',color:C.blue,includes:['Everything in Student','2x free body comp scans','Save ₱3,588 vs monthly','Annual review session','Valid student ID required']},
+    {name:'Annual Regular',price:8000,per:'year',color:C.gold,includes:['Everything in Regular','2x free body comp scans','Annual progress review','Save $63.96 vs monthly','Priority coach access']},
+    {name:'Annual Student',price:6000,per:'year',color:C.blue,includes:['Everything in Student','2x free body comp scans','Save $57.55 vs monthly','Annual review session','Valid student ID required']},
   ];
   return(
     <div style={sec}>
@@ -351,7 +353,7 @@ function MembershipsPage({goTo}){
           <div key={p.name} style={{...card,border:`2px solid ${p.color}`,position:'relative'}}>
             {p.featured&&<div style={{...bdg(C.red),position:'absolute',top:-10,left:20,fontSize:10}}>Most Popular</div>}
             <div style={{fontSize:13,color:C.text2}}>{p.name}</div>
-            <div style={{fontSize:36,fontWeight:800,margin:'6px 0'}}>₱{p.price.toLocaleString()}<span style={{fontSize:13,fontWeight:400,color:C.text2}}>/{p.per}</span></div>
+            <div style={{fontSize:36,fontWeight:800,margin:'6px 0'}}>{usd(p.price)}<span style={{fontSize:13,fontWeight:400,color:C.text2}}>/{p.per}</span></div>
             <div style={{borderTop:`1px solid ${C.border}`,paddingTop:14,marginTop:14}}>
               {p.includes.map(i=><div key={i} style={{fontSize:13,color:C.text2,padding:'3px 0',display:'flex',gap:8}}><span style={{color:C.green}}>✓</span>{i}</div>)}
             </div>
@@ -622,17 +624,17 @@ function JoinPage({goTo}){
           <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>How would you like to start?</div>
           <R val="assessment" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Free Body Assessment</div><div style={{fontSize:12,color:C.text2}}>Full body comp scan + coach consult — no commitment</div></R>
           <R val="monthly" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Monthly Membership</div><div style={{fontSize:12,color:C.text2}}>Start training immediately with full gym access</div></R>
-          <R val="annual" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Annual Membership</div><div style={{fontSize:12,color:C.text2}}>Best value · Save ₱3,988 · Commit to your year</div></R>
+          <R val="annual" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Annual Membership</div><div style={{fontSize:12,color:C.text2}}>Best value · Save $63.96 · Commit to your year</div></R>
         </div>}
         {step===1&&<div>
           <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>Select your plan</div>
-          <R val="student" current={plan} set={setPlan}><div style={{fontWeight:600,fontSize:14}}>Student — ₱799/mo</div><div style={{fontSize:12,color:C.text2}}>Valid student ID required · All base benefits included</div></R>
-          <R val="regular" current={plan} set={setPlan}><div style={{fontWeight:600,fontSize:14}}>Regular — ₱999/mo</div><div style={{fontSize:12,color:C.text2}}>Most popular · Priority class booking included</div></R>
-          <R val="annual" current={plan} set={setPlan}><div style={{fontWeight:600,fontSize:14}}>Annual — ₱8,000/yr</div><div style={{fontSize:12,color:C.text2}}>Best value · 2x free body comp scans included</div></R>
+          <R val="student" current={plan} set={setPlan}><div style={{fontWeight:600,fontSize:14}}>Student — $12.82/mo</div><div style={{fontSize:12,color:C.text2}}>Valid student ID required · All base benefits included</div></R>
+          <R val="regular" current={plan} set={setPlan}><div style={{fontWeight:600,fontSize:14}}>Regular — $16.02/mo</div><div style={{fontSize:12,color:C.text2}}>Most popular · Priority class booking included</div></R>
+          <R val="annual" current={plan} set={setPlan}><div style={{fontWeight:600,fontSize:14}}>Annual — $128/yr</div><div style={{fontSize:12,color:C.text2}}>Best value · 2x free body comp scans included</div></R>
         </div>}
         {step===2&&<div>
           <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>Optional add-ons</div>
-          {['Extra Body Comp Review (+₱200/mo)','Join 30-Day Transformation Challenge (Free)','Photo & Video Consent (for social media)','SMS & Messenger Reminders (Recommended)'].map(item=>(
+          {['Extra Body Comp Review (+$3.21/mo)','Join 30-Day Transformation Challenge (Free)','Photo & Video Consent (for social media)','SMS & Messenger Reminders (Recommended)'].map(item=>(
             <div key={item} style={{border:`1px solid ${C.border}`,borderRadius:8,padding:'12px 14px',marginBottom:8,fontSize:14,color:C.text2}}>{item}</div>
           ))}
         </div>}
@@ -650,14 +652,14 @@ function JoinPage({goTo}){
             ))}
           </div>
           <div style={{background:C.elev,borderRadius:8,padding:'14px 18px'}}>
-            <div style={{display:'flex',justifyContent:'space-between',fontSize:13,color:C.text2,marginBottom:6}}><span>{cp.label}</span><span>₱{cp.price.toLocaleString()}</span></div>
-            <div style={{display:'flex',justifyContent:'space-between',borderTop:`1px solid ${C.border}`,paddingTop:8,fontWeight:700}}><span>Total</span><span style={{color:C.red}}>₱{cp.price.toLocaleString()}</span></div>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:13,color:C.text2,marginBottom:6}}><span>{cp.label}</span><span>{usd(cp.price)}</span></div>
+            <div style={{display:'flex',justifyContent:'space-between',borderTop:`1px solid ${C.border}`,paddingTop:8,fontWeight:700}}><span>Total</span><span style={{color:C.red}}>{usd(cp.price)}</span></div>
           </div>
         </div>}
         {step===5&&<div>
           <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>Review and confirm</div>
           <div style={{background:C.elev,borderRadius:8,padding:'14px 18px',marginBottom:14}}>
-            {[['Plan',`${cp.label} — ₱${cp.price.toLocaleString()}`],['Payment',pay.charAt(0).toUpperCase()+pay.slice(1)],['Assessment','Free body comp scan · Day 1'],['Coach Assignment','Within 24 hours of signup'],['Start Date','Immediate access upon payment']].map(([k,v])=>(
+            {[['Plan',`${cp.label} — ${usd(cp.price)}`],['Payment',pay.charAt(0).toUpperCase()+pay.slice(1)],['Assessment','Free body comp scan · Day 1'],['Coach Assignment','Within 24 hours of signup'],['Start Date','Immediate access upon payment']].map(([k,v])=>(
               <div key={k} style={{display:'flex',justifyContent:'space-between',padding:'5px 0',fontSize:13}}><span style={{color:C.text2}}>{k}</span><span>{v}</span></div>
             ))}
           </div>
@@ -666,7 +668,1491 @@ function JoinPage({goTo}){
       </div>
       <div style={{display:'flex',gap:10}}>
         {step>0&&<button style={{...btn(C.red,true),flex:1}} onClick={()=>setStep(n=>n-1)}>Back</button>}
-        <button style={{...btn(),flex:2}} onClick={()=>setStep(n=>n+1)}>{step===5?`Confirm and Pay ₱${cp.price.toLocaleString()}`:'Continue'}</button>
+        <button style={{...btn(),flex:2}} onClick={()=>setStep(n=>n+1)}>{step===5?`Confirm and Pay ${usd(cp.price)}`:'Continue'}</button>
+      </div>
+    </div>
+  );
+}
+
+function StoriesPage({goTo}){
+  return(
+    <div style={sec}>
+      <span style={lbl}>Community</span>
+      <h1 style={h1s}>Success Stories</h1>
+      <p style={{color:C.text2,marginBottom:36,fontSize:14}}>Real results from real members. No supplements, no shortcuts — just consistent coaching and hard work.</p>
+      <div style={{display:'flex',flexDirection:'column',gap:16}}>
+        {REVIEWS.map(r=>(
+          <div key={r.name} style={card}>
+            <div style={{display:'flex',gap:14,marginBottom:12}}>
+              <div style={{width:44,height:44,borderRadius:'50%',background:C.redDim,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,color:C.red,fontSize:14,flexShrink:0}}>{r.name.split(' ').map(n=>n[0]).join('')}</div>
+              <div>
+                <div style={{fontWeight:700,fontSize:14}}>{r.name}</div>
+                <div style={{fontSize:12,color:C.text3}}>{r.plan} · {r.date}</div>
+                <div style={{fontSize:14,color:C.gold}}>{'★'.repeat(r.rating)}</div>
+              </div>
+            </div>
+            <p style={{fontSize:14,color:C.text2,lineHeight:1.7}}>{r.text}</p>
+          </div>
+        ))}
+      </div>
+      <div style={{textAlign:'center',marginTop:40}}>
+        <button style={{...btn(),padding:'13px 28px',fontSize:14}} onClick={()=>goTo('join')}>Write Your Own Story</button>
+      </div>
+      <div style={{...card,marginTop:28,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+        <div><div style={{fontWeight:600,fontSize:14}}>Have a question or ready to visit?</div><div style={{fontSize:13,color:C.text2}}>+63 956 700 7785 · 4F Noli Rose Bldg, Malvar, Batangas</div></div>
+        <button style={{...btn(C.red,true),fontSize:13}} onClick={()=>goTo('contact')}>Contact Us</button>
+      </div>
+    </div>
+  );
+}
+
+function FAQPage(){
+  const [open,setOpen]=useState(0);
+  return(
+    <div style={sec}>
+      <span style={lbl}>Help</span>
+      <h1 style={h1s}>Frequently Asked Questions</h1>
+      <p style={{color:C.text2,marginBottom:36,fontSize:14}}>Everything you need to know about Iron Tribe membership and training.</p>
+      <div style={{display:'flex',flexDirection:'column',gap:8}}>
+        {FAQ_ITEMS.map((item,i)=>(
+          <div key={i} style={{...card,padding:0,overflow:'hidden'}}>
+            <button onClick={()=>setOpen(open===i?-1:i)} style={{width:'100%',background:'transparent',border:'none',padding:'16px 20px',display:'flex',justifyContent:'space-between',alignItems:'center',cursor:'pointer',textAlign:'left'}}>
+              <span style={{fontWeight:600,fontSize:14,color:C.text}}>{item.q}</span>
+              <span style={{color:C.red,fontSize:20,flexShrink:0,marginLeft:12}}>{open===i?'−':'+'}</span>
+            </button>
+            {open===i&&<div style={{padding:'0 20px 16px',fontSize:14,color:C.text2,lineHeight:1.7,borderTop:`1px solid ${C.border}`}}><div style={{paddingTop:14}}>{item.a}</div></div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+function AdminDashboard(){
+  const {data:d,loading,error,refresh}=useGAS('getDashboard');
+  const pct=d?Math.min(100,Math.round(((d.monthRevenue||0)/100000)*100)):0;
+  return(
+    <div>
+      <GASNote error={error}/>
+      <div style={{marginBottom:20}}>
+        <span style={lbl}>Aurora Operator Suite</span><h2 style={h2s}>Dashboard</h2>
+        <div style={{fontSize:12,color:C.text3}}>{new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} · Malvar, Batangas</div>
+      </div>
+      {loading&&!d?<Spin/>:(
+      <>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:20}}>
+        {[['MTD Revenue','\u20b1'+((d||{}).monthRevenue||0).toLocaleString(),pct+'% of \u20b1100K target',C.green],
+          ['Active Members',(d||{}).activeMembers||'\u2014',(d||{}).totalMembers||0+' total',C.gold],
+          ['Open Leads',(d||{}).openLeads||'\u2014',(d||{}).totalLeads||0+' in pipeline',C.red],
+          ['Today Bookings',(d||{}).todayBookings||'\u2014','Confirmed classes',C.text],
+        ].map(([label,val,sub,color])=>(
+          <div key={label} style={metric}>
+            <div style={{fontSize:11,color:C.text3,marginBottom:4}}>{label}</div>
+            <div style={{fontSize:22,fontWeight:700,color}}>{val}</div>
+            <div style={{fontSize:11,color:C.text3}}>{sub}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:12,fontSize:14}}>MTD Revenue Progress</div>
+          <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:5}}>
+            <span>{'\u20b1'+((d||{}).monthRevenue||0).toLocaleString()} / \u20b1100,000</span>
+            <span style={{color:C.green}}>{pct}%</span>
+          </div>
+          <div style={{height:8,background:C.elev,borderRadius:4,marginBottom:8}}>
+            <div style={{height:'100%',background:C.green,borderRadius:4,width:pct+'%',transition:'width 0.4s'}}/>
+          </div>
+          <div style={{fontSize:11,color:C.text3}}>Gap: {'\u20b1'+Math.max(0,100000-((d||{}).monthRevenue||0)).toLocaleString()}</div>
+        </div>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:12,fontSize:14}}>Operations Snapshot</div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+            {[['Active Coaches',(d||{}).activeCoaches||'\u2014',C.gold],
+              ['Challenges',(d||{}).activeChallenges||'\u2014',C.purple],
+              ['Avg Rating',(d||{}).avgRating||'\u2014',C.green],
+              ['Today Classes',(d||{}).todayBookings||'\u2014',C.text]].map(([l,v,c])=>(
+              <div key={l} style={{background:C.elev,borderRadius:6,padding:'8px 10px'}}>
+                <div style={{fontSize:18,fontWeight:700,color:c}}>{v}</div>
+                <div style={{fontSize:10,color:C.text3}}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      {((d||{}).recentMembers||[]).length>0&&(
+        <div style={{...card,marginBottom:14}}>
+          <div style={{fontWeight:600,marginBottom:12,fontSize:14}}>Recent Members</div>
+          {((d||{}).recentMembers||[]).map((m,i)=>(
+            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${C.border}`,fontSize:13}}>
+              <div><span style={{fontWeight:500}}>{m.name}</span><span style={{fontSize:11,color:C.text3,marginLeft:8}}>{m.plan} · {m.email}</span></div>
+              <span style={{...bdg(m.status==='Active'?C.green:C.red),fontSize:10}}>{m.status||'Active'}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      {((d||{}).recentLeads||[]).length>0&&(
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:12,fontSize:14}}>Recent Leads</div>
+          {((d||{}).recentLeads||[]).map((l,i)=>(
+            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:`1px solid ${C.border}`,fontSize:13}}>
+              <div><span style={{fontWeight:500}}>{l.name}</span><span style={{fontSize:11,color:C.text3,marginLeft:8}}>via {l.source} · {l.interestedIn}</span></div>
+              <span style={{...bdg(C.gold),fontSize:10}}>{l.status}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      </>
+      )}
+    </div>
+  );
+}
+
+function AdminPL(){
+  const {data:d,loading,error,refresh}=useGAS('getPL');
+  const [modal,setModal]=useState(false);
+  const today=new Date().toISOString().slice(0,10);
+  const EMPTY={type:'Revenue',category:'Membership',description:'',amount:'',date:today,paymentMethod:'Cash',reference:'',notes:''};
+  const [form,setForm]=useState(EMPTY);
+  const {mutate,loading:saving}=useMutation();
+  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
+  const save=async()=>{await mutate('insert',{sheet:'Transactions',row:form});setModal(false);setForm(EMPTY);refresh();};
+  const mtd=(d||{}).mtd||{};
+  return(
+    <div>
+      <GASNote error={error}/>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:16}}>
+        <div><span style={lbl}>Financials</span><h2 style={{...h2s,marginBottom:0}}>{'P&L Overview'}</h2></div>
+        <button style={{...btn(),fontSize:12,padding:'7px 14px'}} onClick={()=>setModal(true)}>+ Add Transaction</button>
+      </div>
+      <div style={{fontSize:11,color:C.text3,marginBottom:16}}>Month-to-date · {new Date().toLocaleString('en-PH',{month:'long',year:'numeric'})}</div>
+      {loading&&!d?<Spin/>:(
+      <>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:20}}>
+        {[['Revenue','\u20b1'+(mtd.revenue||0).toLocaleString(),C.green],
+          ['Total Expenses','\u20b1'+(mtd.expenses||0).toLocaleString(),C.red],
+          ['Gross Profit','\u20b1'+(mtd.gross||0).toLocaleString(),C.green],
+          ['Net Profit','\u20b1'+(mtd.net||0).toLocaleString(),C.gold],
+        ].map(([l,v,color])=>(
+          <div key={l} style={metric}><div style={{fontSize:11,color:C.text3,marginBottom:4}}>{l}</div><div style={{fontSize:20,fontWeight:700,color}}>{v}</div></div>
+        ))}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Gross Margin</div>
+          <div style={{fontSize:32,fontWeight:800,color:C.green,marginBottom:8}}>{mtd.margin||0}%</div>
+          <div style={{height:5,background:C.elev,borderRadius:3}}><div style={{height:'100%',background:C.green,borderRadius:3,width:Math.min(mtd.margin||0,100)+'%'}}/></div>
+        </div>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Net Margin (25% tax est.)</div>
+          <div style={{fontSize:32,fontWeight:800,color:C.gold,marginBottom:8}}>{mtd.margin||0}%</div>
+          <div style={{height:5,background:C.elev,borderRadius:3}}><div style={{height:'100%',background:C.gold,borderRadius:3,width:Math.min(mtd.margin||0,100)+'%'}}/></div>
+          <div style={{fontSize:11,color:C.text3,marginTop:8}}>Tax est.: {'\u20b1'+(mtd.tax||0).toLocaleString()}</div>
+        </div>
+      </div>
+      {Object.keys((d||{}).expenseBreakdown||{}).length>0&&(
+        <div style={{...card,marginBottom:14}}>
+          <div style={{fontWeight:600,marginBottom:14,fontSize:13}}>Expense Breakdown (MTD)</div>
+          {Object.entries((d||{}).expenseBreakdown||{}).map(([cat,amt])=>{
+            const total=Object.values((d||{}).expenseBreakdown||{}).reduce((a,b)=>a+b,0);
+            const pct=total?Math.round((amt/total)*100):0;
+            return(
+              <div key={cat} style={{marginBottom:10}}>
+                <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:4}}><span>{cat}</span><span>{'\u20b1'+(amt||0).toLocaleString()+' ('+pct+'%)'}</span></div>
+                <div style={{height:3,background:C.elev,borderRadius:2}}><div style={{height:'100%',background:C.text3,borderRadius:2,width:pct+'%'}}/></div>
+              </div>
+            );
+          })}
+          <div style={{borderTop:`1px solid ${C.border}`,paddingTop:10,marginTop:4,display:'flex',justifyContent:'space-between',fontSize:13,fontWeight:700}}>
+            <span>Total Expenses</span><span style={{color:C.red}}>{'\u20b1'+(mtd.expenses||0).toLocaleString()}</span>
+          </div>
+        </div>
+      )}
+      {((d||{}).recentTransactions||[]).length>0&&(
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:12,fontSize:13}}>Recent Transactions</div>
+          {((d||{}).recentTransactions||[]).slice(0,15).map((t,i)=>(
+            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'7px 0',borderBottom:`1px solid ${C.border}`,fontSize:12}}>
+              <div>
+                <span style={{fontWeight:500}}>{t.description}</span>
+                <span style={{fontSize:11,color:C.text3,marginLeft:8}}>{t.category} · {t.date}</span>
+              </div>
+              <span style={{color:t.type==='Revenue'?C.green:C.red,fontWeight:700}}>
+                {(t.type==='Revenue'?'+':'-')+'\u20b1'+parseFloat(t.amount||0).toLocaleString()}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+      </>
+      )}
+      {modal&&(
+        <Modal onClose={()=>setModal(false)} title="Add Transaction">
+          <FR label="Type"><FS v={form.type} sv={sf('type')} opts={['Revenue','Expense']}/></FR>
+          <FR label="Category"><FI v={form.category} sv={sf('category')} ph="e.g. Membership, Rent, Payroll"/></FR>
+          <FR label="Description"><FI v={form.description} sv={sf('description')} ph="Transaction description"/></FR>
+          <FR label="Amount"><FI v={form.amount} sv={sf('amount')} ph="0.00" type="number"/></FR>
+          <FR label="Date"><FI v={form.date} sv={sf('date')} type="date"/></FR>
+          <FR label="Payment Method"><FS v={form.paymentMethod} sv={sf('paymentMethod')} opts={['Cash','GCash','Maya','Card','Bank Transfer','QR Ph']}/></FR>
+          <FR label="Reference"><FI v={form.reference} sv={sf('reference')} ph="Invoice / receipt number"/></FR>
+          <div style={{display:'flex',gap:8,marginTop:6}}>
+            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
+            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Transaction'}</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function AdminLeads(){
+  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Leads'});
+  const [modal,setModal]=useState(false);
+  const [editing,setEditing]=useState(null);
+  const today=new Date().toISOString().slice(0,10);
+  const EMPTY={name:'',phone:'',email:'',source:'Facebook',status:'New',interestedIn:'Monthly',dateAdded:today,followUpDate:'',assignedCoach:'',notes:''};
+  const [form,setForm]=useState(EMPTY);
+  const {mutate,loading:saving}=useMutation();
+  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
+  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
+  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
+  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Leads',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
+  const del=async id=>{if(!window.confirm('Delete this lead?'))return;await mutate('delete',{sheet:'Leads',row:{id}});refresh();};
+  const SC={'New':C.text2,'Contacted':C.blue,'Toured':C.purple,'Converted':C.green,'Lost':C.red};
+  return(
+    <div>
+      <GASNote error={error}/>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
+        <div><span style={lbl}>CRM</span><h2 style={{...h2s,marginBottom:0}}>Leads Pipeline</h2></div>
+        <button style={{...btn(),fontSize:12,padding:'7px 14px'}} onClick={openAdd}>+ Add Lead</button>
+      </div>
+      <div style={{display:'flex',gap:6,marginBottom:16,flexWrap:'wrap'}}>
+        {Object.entries(SC).map(([s,c])=><span key={s} style={{...bdg(c),fontSize:10}}>{s}</span>)}
+      </div>
+      {loading&&!rows?<Spin/>:(rows||[]).map(l=>(
+        <div key={l.id} style={{...card,display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
+          <div style={{width:32,height:32,borderRadius:'50%',background:C.elev,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:11,flexShrink:0}}>
+            {(l.name||'?').split(' ').map(n=>n[0]).join('').slice(0,2)}
+          </div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:600,fontSize:13}}>{l.name}</div>
+            <div style={{fontSize:11,color:C.text2}}>via {l.source} · {l.interestedIn} · {l.dateAdded}</div>
+          </div>
+          {l.assignedCoach&&<span style={{fontSize:11,color:C.text3}}>{l.assignedCoach}</span>}
+          <span style={{...bdg(SC[l.status]||C.text2),fontSize:10}}>{l.status}</span>
+          <button style={{...btn(C.gold,true),fontSize:11,padding:'4px 8px'}} onClick={()=>openEdit(l)}>Edit</button>
+          <button style={{...btn(C.red,true),fontSize:11,padding:'4px 8px'}} onClick={()=>del(l.id)}>Del</button>
+        </div>
+      ))}
+      {modal&&(
+        <Modal onClose={()=>setModal(false)} title={editing?'Edit Lead':'Add Lead'}>
+          <FR label="Name"><FI v={form.name} sv={sf('name')} ph="Full name"/></FR>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Phone"><FI v={form.phone} sv={sf('phone')} ph="+63 9XX XXX XXXX"/></FR>
+            <FR label="Email"><FI v={form.email} sv={sf('email')} ph="email@example.com" type="email"/></FR>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Source"><FS v={form.source} sv={sf('source')} opts={['Facebook','Instagram','Walk-in','Referral','Google','Other']}/></FR>
+            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['New','Contacted','Toured','Converted','Lost']}/></FR>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Interested In"><FS v={form.interestedIn} sv={sf('interestedIn')} opts={['Monthly','Quarterly','Annual','Student Monthly','Drop-in']}/></FR>
+            <FR label="Assigned Coach"><FI v={form.assignedCoach} sv={sf('assignedCoach')} ph="Coach name"/></FR>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Date Added"><FI v={form.dateAdded} sv={sf('dateAdded')} type="date"/></FR>
+            <FR label="Follow-up Date"><FI v={form.followUpDate} sv={sf('followUpDate')} type="date"/></FR>
+          </div>
+          <FR label="Notes"><FI v={form.notes} sv={sf('notes')} ph="Any notes..."/></FR>
+          <div style={{display:'flex',gap:8,marginTop:6}}>
+            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
+            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Lead'}</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function AdminMembers(){
+  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Members'});
+  const [filter,setFilter]=useState('all');
+  const [modal,setModal]=useState(false);
+  const [editing,setEditing]=useState(null);
+  const today=new Date().toISOString().slice(0,10);
+  const EMPTY={name:'',phone:'',email:'',plan:'Monthly',status:'Active',joinDate:today,endDate:'',emergencyContact:'',emergencyPhone:'',notes:''};
+  const [form,setForm]=useState(EMPTY);
+  const {mutate,loading:saving}=useMutation();
+  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
+  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
+  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
+  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Members',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
+  const del=async id=>{if(!window.confirm('Delete this member?'))return;await mutate('delete',{sheet:'Members',row:{id}});refresh();};
+  const filtered=(rows||[]).filter(m=>filter==='all'||m.status===filter);
+  return(
+    <div>
+      <GASNote error={error}/>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
+        <div><span style={lbl}>CRM</span><h2 style={{...h2s,marginBottom:0}}>Members</h2></div>
+        <div style={{display:'flex',gap:8}}>
+          {['all','Active','Inactive'].map(f=>(
+            <button key={f} style={{...btn(C.red,filter!==f),fontSize:12,padding:'6px 12px'}} onClick={()=>setFilter(f)}>{f==='all'?'All':f}</button>
+          ))}
+          <button style={{...btn(),fontSize:12,padding:'6px 12px'}} onClick={openAdd}>+ Add</button>
+        </div>
+      </div>
+      {loading&&!rows?<Spin/>:filtered.map(m=>(
+        <div key={m.id} style={{...card,display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
+          <div style={{width:34,height:34,borderRadius:'50%',background:m.status==='Active'?C.greenDim:C.redDim,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:11,color:m.status==='Active'?C.green:C.red,flexShrink:0}}>
+            {(m.name||'?').split(' ').map(n=>n[0]).join('').slice(0,2)}
+          </div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:600,fontSize:13}}>{m.name}</div>
+            <div style={{fontSize:11,color:C.text2}}>{m.plan} · {m.email} · Joined {m.joinDate}</div>
+          </div>
+          {m.endDate&&<span style={{fontSize:11,color:C.text3}}>Until {m.endDate}</span>}
+          <span style={{...bdg(m.status==='Active'?C.green:C.red),fontSize:10}}>{m.status}</span>
+          <button style={{...btn(C.gold,true),fontSize:11,padding:'4px 8px'}} onClick={()=>openEdit(m)}>Edit</button>
+          <button style={{...btn(C.red,true),fontSize:11,padding:'4px 8px'}} onClick={()=>del(m.id)}>Del</button>
+        </div>
+      ))}
+      {modal&&(
+        <Modal onClose={()=>setModal(false)} title={editing?'Edit Member':'Add Member'}>
+          <FR label="Name"><FI v={form.name} sv={sf('name')} ph="Full name"/></FR>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Phone"><FI v={form.phone} sv={sf('phone')} ph="+63 9XX XXX XXXX"/></FR>
+            <FR label="Email"><FI v={form.email} sv={sf('email')} ph="email@example.com" type="email"/></FR>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Plan"><FS v={form.plan} sv={sf('plan')} opts={['Monthly','Quarterly','Annual','Student Monthly','Student Annual','Drop-in']}/></FR>
+            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['Active','Inactive','Frozen','Expired']}/></FR>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Join Date"><FI v={form.joinDate} sv={sf('joinDate')} type="date"/></FR>
+            <FR label="End Date"><FI v={form.endDate} sv={sf('endDate')} type="date"/></FR>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Emergency Contact"><FI v={form.emergencyContact} sv={sf('emergencyContact')} ph="Name"/></FR>
+            <FR label="Emergency Phone"><FI v={form.emergencyPhone} sv={sf('emergencyPhone')} ph="+63 9XX XXX XXXX"/></FR>
+          </div>
+          <FR label="Notes"><FI v={form.notes} sv={sf('notes')} ph="Any notes..."/></FR>
+          <div style={{display:'flex',gap:8,marginTop:6}}>
+            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
+            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Member'}</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function AdminCoaches(){
+  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Coaches'});
+  const [modal,setModal]=useState(false);
+  const [editing,setEditing]=useState(null);
+  const today=new Date().toISOString().slice(0,10);
+  const EMPTY={name:'',phone:'',email:'',specialization:'',schedule:'',status:'Active',joinDate:today,bio:'',certifications:'',notes:''};
+  const [form,setForm]=useState(EMPTY);
+  const {mutate,loading:saving}=useMutation();
+  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
+  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
+  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
+  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Coaches',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
+  const del=async id=>{if(!window.confirm('Delete this coach?'))return;await mutate('delete',{sheet:'Coaches',row:{id}});refresh();};
+  const CC=[C.red,C.purple,C.green,C.blue,C.gold];
+  return(
+    <div>
+      <GASNote error={error}/>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
+        <div><span style={lbl}>Team</span><h2 style={{...h2s,marginBottom:0}}>Coaches</h2></div>
+        <button style={{...btn(),fontSize:12,padding:'7px 14px'}} onClick={openAdd}>+ Add Coach</button>
+      </div>
+      {loading&&!rows?<Spin/>:(
+        <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:14}}>
+          {(rows||[]).map((c,i)=>(
+            <div key={c.id} style={card}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
+                <div style={{display:'flex',gap:10,alignItems:'center'}}>
+                  <div style={{width:40,height:40,borderRadius:'50%',background:CC[i%5]+'20',border:`2px solid ${CC[i%5]}`,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:13,color:CC[i%5],flexShrink:0}}>
+                    {(c.name||'?').split(' ').map(n=>n[0]).join('').slice(0,2)}
+                  </div>
+                  <div><div style={{fontWeight:700,fontSize:13}}>{c.name}</div><div style={{fontSize:11,color:C.text2}}>{c.specialization}</div></div>
+                </div>
+                <div style={{display:'flex',gap:6}}>
+                  <button style={{...btn(C.gold,true),fontSize:10,padding:'3px 7px'}} onClick={()=>openEdit(c)}>Edit</button>
+                  <button style={{...btn(C.red,true),fontSize:10,padding:'3px 7px'}} onClick={()=>del(c.id)}>Del</button>
+                </div>
+              </div>
+              {c.schedule&&<div style={{fontSize:11,color:C.text3,marginBottom:6}}>{c.schedule}</div>}
+              {c.bio&&<div style={{fontSize:12,color:C.text2,marginBottom:8,lineHeight:1.5}}>{c.bio}</div>}
+              {c.certifications&&<span style={{...bdg(CC[i%5]),fontSize:9}}>{c.certifications}</span>}
+            </div>
+          ))}
+        </div>
+      )}
+      {modal&&(
+        <Modal onClose={()=>setModal(false)} title={editing?'Edit Coach':'Add Coach'}>
+          <FR label="Name"><FI v={form.name} sv={sf('name')} ph="Coach full name"/></FR>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Phone"><FI v={form.phone} sv={sf('phone')} ph="+63 9XX XXX XXXX"/></FR>
+            <FR label="Email"><FI v={form.email} sv={sf('email')} ph="coach@irontribe.com" type="email"/></FR>
+          </div>
+          <FR label="Specialization"><FI v={form.specialization} sv={sf('specialization')} ph="e.g. Strength and Conditioning"/></FR>
+          <FR label="Schedule"><FI v={form.schedule} sv={sf('schedule')} ph="e.g. Mon-Fri 6AM-2PM"/></FR>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['Active','Inactive','On Leave']}/></FR>
+            <FR label="Join Date"><FI v={form.joinDate} sv={sf('joinDate')} type="date"/></FR>
+          </div>
+          <FR label="Bio"><FI v={form.bio} sv={sf('bio')} ph="Brief bio..."/></FR>
+          <FR label="Certifications"><FI v={form.certifications} sv={sf('certifications')} ph="e.g. NSCA-CSCS, RYT-200"/></FR>
+          <div style={{display:'flex',gap:8,marginTop:6}}>
+            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
+            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Coach'}</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function AdminBookings(){
+  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Bookings'});
+  const [dayFilter,setDayFilter]=useState('today');
+  const [modal,setModal]=useState(false);
+  const [editing,setEditing]=useState(null);
+  const today=new Date().toISOString().slice(0,10);
+  const EMPTY={memberName:'',coachName:'',class:'',date:today,time:'6:00 AM',duration:'60',status:'Confirmed',notes:''};
+  const [form,setForm]=useState(EMPTY);
+  const {mutate,loading:saving}=useMutation();
+  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
+  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
+  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
+  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Bookings',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
+  const del=async id=>{if(!window.confirm('Delete this booking?'))return;await mutate('delete',{sheet:'Bookings',row:{id}});refresh();};
+  const filtered=(rows||[]).filter(b=>dayFilter==='all'||b.date===today);
+  const SC={Confirmed:C.green,Pending:C.gold,Cancelled:C.red,Completed:C.text2};
+  return(
+    <div>
+      <GASNote error={error}/>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
+        <div><span style={lbl}>Schedule</span><h2 style={{...h2s,marginBottom:0}}>Bookings</h2></div>
+        <div style={{display:'flex',gap:8}}>
+          {['today','all'].map(f=>(
+            <button key={f} style={{...btn(C.red,dayFilter!==f),fontSize:12,padding:'6px 12px'}} onClick={()=>setDayFilter(f)}>{f==='today'?'Today':'All'}</button>
+          ))}
+          <button style={{...btn(),fontSize:12,padding:'6px 12px'}} onClick={openAdd}>+ Add</button>
+        </div>
+      </div>
+      {loading&&!rows?<Spin/>:filtered.length===0?
+        <div style={{...card,textAlign:'center',color:C.text3,fontSize:13,padding:'32px'}}>No bookings {dayFilter==='today'?'for today':''}</div>
+        :filtered.map(b=>(
+        <div key={b.id} style={{...card,display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
+          <div style={{minWidth:56,textAlign:'center',background:C.elev,borderRadius:8,padding:'6px 8px',flexShrink:0}}>
+            <div style={{fontWeight:700,fontSize:12}}>{b.time}</div>
+            <div style={{fontSize:9,color:C.text3}}>{b.date}</div>
+          </div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:600,fontSize:13}}>{b.class}</div>
+            <div style={{fontSize:11,color:C.text2}}>{b.memberName} · {b.coachName} · {b.duration} min</div>
+          </div>
+          <span style={{...bdg(SC[b.status]||C.text2),fontSize:10}}>{b.status}</span>
+          <button style={{...btn(C.gold,true),fontSize:11,padding:'4px 8px'}} onClick={()=>openEdit(b)}>Edit</button>
+          <button style={{...btn(C.red,true),fontSize:11,padding:'4px 8px'}} onClick={()=>del(b.id)}>Del</button>
+        </div>
+      ))}
+      {modal&&(
+        <Modal onClose={()=>setModal(false)} title={editing?'Edit Booking':'Add Booking'}>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Member Name"><FI v={form.memberName} sv={sf('memberName')} ph="Member full name"/></FR>
+            <FR label="Coach Name"><FI v={form.coachName} sv={sf('coachName')} ph="Coach name"/></FR>
+          </div>
+          <FR label="Class / Session Type"><FI v={form.class} sv={sf('class')} ph="e.g. Strength Class, Personal Training"/></FR>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Date"><FI v={form.date} sv={sf('date')} type="date"/></FR>
+            <FR label="Time"><FI v={form.time} sv={sf('time')} ph="6:00 AM"/></FR>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Duration (min)"><FI v={form.duration} sv={sf('duration')} ph="60" type="number"/></FR>
+            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['Confirmed','Pending','Cancelled','Completed']}/></FR>
+          </div>
+          <FR label="Notes"><FI v={form.notes} sv={sf('notes')} ph="Any notes..."/></FR>
+          <div style={{display:'flex',gap:8,marginTop:6}}>
+            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
+            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Booking'}</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function AdminChallenges(){
+  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Challenges'});
+  const [modal,setModal]=useState(false);
+  const [editing,setEditing]=useState(null);
+  const today=new Date().toISOString().slice(0,10);
+  const EMPTY={title:'',description:'',category:'Physique',startDate:today,endDate:'',maxParticipants:'20',prize:'',status:'Active',notes:''};
+  const [form,setForm]=useState(EMPTY);
+  const {mutate,loading:saving}=useMutation();
+  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
+  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
+  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
+  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Challenges',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
+  const del=async id=>{if(!window.confirm('Delete this challenge?'))return;await mutate('delete',{sheet:'Challenges',row:{id}});refresh();};
+  return(
+    <div>
+      <GASNote error={error}/>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
+        <div><span style={lbl}>Engagement</span><h2 style={{...h2s,marginBottom:0}}>Challenges</h2></div>
+        <button style={{...btn(),fontSize:12,padding:'7px 14px'}} onClick={openAdd}>+ Add Challenge</button>
+      </div>
+      {loading&&!rows?<Spin/>:(rows||[]).map(ch=>(
+        <div key={ch.id} style={{...card,marginBottom:14}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
+            <div>
+              <div style={{fontWeight:700,fontSize:13}}>{ch.title}</div>
+              <div style={{fontSize:11,color:C.text2}}>{ch.startDate} to {ch.endDate} · {ch.participants||0}/{ch.maxParticipants} participants</div>
+            </div>
+            <div style={{display:'flex',gap:6,alignItems:'center'}}>
+              <span style={{...bdg(ch.status==='Active'?C.green:C.text2),fontSize:10}}>{ch.status}</span>
+              <button style={{...btn(C.gold,true),fontSize:10,padding:'3px 7px'}} onClick={()=>openEdit(ch)}>Edit</button>
+              <button style={{...btn(C.red,true),fontSize:10,padding:'3px 7px'}} onClick={()=>del(ch.id)}>Del</button>
+            </div>
+          </div>
+          {ch.description&&<div style={{fontSize:12,color:C.text2,marginBottom:8}}>{ch.description}</div>}
+          <div style={{display:'flex',gap:20,paddingTop:8,borderTop:`1px solid ${C.border}`}}>
+            {ch.prize&&<div><div style={{fontSize:11,color:C.text3}}>Prize</div><div style={{fontSize:12,fontWeight:600,color:C.gold}}>{ch.prize}</div></div>}
+            {ch.category&&<div><div style={{fontSize:11,color:C.text3}}>Category</div><div style={{fontSize:12,fontWeight:600}}>{ch.category}</div></div>}
+          </div>
+        </div>
+      ))}
+      {modal&&(
+        <Modal onClose={()=>setModal(false)} title={editing?'Edit Challenge':'Add Challenge'}>
+          <FR label="Title"><FI v={form.title} sv={sf('title')} ph="Challenge name"/></FR>
+          <FR label="Description"><FI v={form.description} sv={sf('description')} ph="What is this challenge?"/></FR>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Category"><FS v={form.category} sv={sf('category')} opts={['Physique','Strength','Endurance','Nutrition','Consistency','Mixed']}/></FR>
+            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['Active','Upcoming','Completed','Cancelled']}/></FR>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Start Date"><FI v={form.startDate} sv={sf('startDate')} type="date"/></FR>
+            <FR label="End Date"><FI v={form.endDate} sv={sf('endDate')} type="date"/></FR>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Max Participants"><FI v={form.maxParticipants} sv={sf('maxParticipants')} ph="20" type="number"/></FR>
+            <FR label="Prize"><FI v={form.prize} sv={sf('prize')} ph="e.g. Free month + merch"/></FR>
+          </div>
+          <div style={{display:'flex',gap:8,marginTop:6}}>
+            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
+            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Challenge'}</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function AdminReviews(){
+  const {data:rows,loading,error,refresh}=useGAS('getAll',{sheet:'Reviews'});
+  const [modal,setModal]=useState(false);
+  const [editing,setEditing]=useState(null);
+  const today=new Date().toISOString().slice(0,10);
+  const EMPTY={memberName:'',memberEmail:'',rating:'5',text:'',platform:'Google',date:today,status:'Published',response:''};
+  const [form,setForm]=useState(EMPTY);
+  const {mutate,loading:saving}=useMutation();
+  const sf=k=>v=>setForm(f=>({...f,[k]:v}));
+  const openAdd=()=>{setEditing(null);setForm(EMPTY);setModal(true);};
+  const openEdit=r=>{setEditing(r);setForm({...r});setModal(true);};
+  const save=async()=>{await mutate(editing?'update':'insert',{sheet:'Reviews',row:editing?{...form,id:editing.id}:form});setModal(false);refresh();};
+  const del=async id=>{if(!window.confirm('Delete this review?'))return;await mutate('delete',{sheet:'Reviews',row:{id}});refresh();};
+  const avg=(rows||[]).length?((rows||[]).reduce((s,r)=>s+parseFloat(r.rating||0),0)/(rows||[]).length).toFixed(1):'--';
+  return(
+    <div>
+      <GASNote error={error}/>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:20}}>
+        <div><span style={lbl}>Reputation</span><h2 style={{...h2s,marginBottom:0}}>Member Reviews</h2></div>
+        <button style={{...btn(),fontSize:12,padding:'7px 14px'}} onClick={openAdd}>+ Add Review</button>
+      </div>
+      <div style={{...metric,marginBottom:20,display:'flex',gap:32}}>
+        <div><div style={{fontSize:32,fontWeight:700,color:C.gold}}>{avg}</div><div style={{fontSize:11,color:C.text3}}>Avg Rating</div></div>
+        <div><div style={{fontSize:32,fontWeight:700}}>{(rows||[]).length}</div><div style={{fontSize:11,color:C.text3}}>Total Reviews</div></div>
+        <div><div style={{fontSize:32,fontWeight:700,color:C.green}}>{(rows||[]).filter(r=>r.status==='Published').length}</div><div style={{fontSize:11,color:C.text3}}>Published</div></div>
+      </div>
+      {loading&&!rows?<Spin/>:(rows||[]).map(r=>(
+        <div key={r.id} style={{...card,marginBottom:10}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
+            <div>
+              <div style={{fontWeight:600,fontSize:13}}>{r.memberName}</div>
+              <div style={{fontSize:11,color:C.text3}}>{r.platform} · {r.date}</div>
+            </div>
+            <div style={{display:'flex',gap:6,alignItems:'center'}}>
+              <span style={{fontSize:13,color:C.gold}}>{'\u2605'.repeat(Math.round(parseFloat(r.rating||0)))}</span>
+              <span style={{...bdg(r.status==='Published'?C.green:C.text3),fontSize:9}}>{r.status}</span>
+              <button style={{...btn(C.gold,true),fontSize:10,padding:'3px 7px'}} onClick={()=>openEdit(r)}>Edit</button>
+              <button style={{...btn(C.red,true),fontSize:10,padding:'3px 7px'}} onClick={()=>del(r.id)}>Del</button>
+            </div>
+          </div>
+          <p style={{fontSize:12,color:C.text2,lineHeight:1.6,marginBottom:r.response?6:0}}>{r.text}</p>
+          {r.response&&<div style={{background:C.elev,borderRadius:6,padding:'8px 10px',fontSize:11,color:C.text3,borderLeft:`2px solid ${C.gold}`}}>{r.response}</div>}
+        </div>
+      ))}
+      {modal&&(
+        <Modal onClose={()=>setModal(false)} title={editing?'Edit Review':'Add Review'}>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <FR label="Member Name"><FI v={form.memberName} sv={sf('memberName')} ph="Full name"/></FR>
+            <FR label="Email"><FI v={form.memberEmail} sv={sf('memberEmail')} ph="email@example.com" type="email"/></FR>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10}}>
+            <FR label="Rating"><FS v={form.rating} sv={sf('rating')} opts={['5','4','3','2','1']}/></FR>
+            <FR label="Platform"><FS v={form.platform} sv={sf('platform')} opts={['Google','Facebook','Walk-in','Instagram','Other']}/></FR>
+            <FR label="Status"><FS v={form.status} sv={sf('status')} opts={['Published','Pending','Hidden']}/></FR>
+          </div>
+          <FR label="Review Text"><FI v={form.text} sv={sf('text')} ph="What the member said..."/></FR>
+          <FR label="Date"><FI v={form.date} sv={sf('date')} type="date"/></FR>
+          <FR label="Our Response (optional)"><FI v={form.response} sv={sf('response')} ph="Response to this review..."/></FR>
+          <div style={{display:'flex',gap:8,marginTop:6}}>
+            <button style={{...btn(C.red,true),flex:1,fontSize:13}} onClick={()=>setModal(false)}>Cancel</button>
+            <button style={{...btn(),flex:2,fontSize:13}} onClick={save} disabled={saving}>{saving?'Saving...':'Save Review'}</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+function AdminMarketing(){
+  const [active,setActive]=useState(null);
+  const {display,running,startTyping}=useTypewriter(8);
+  const generate=(type)=>{setActive(type);startTyping(MARKETING_OUTPUTS[type]);};
+  return(
+    <div>
+      <span style={lbl}>Content</span><h2 style={h2s}>Marketing Generator</h2>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:10,marginBottom:20}}>
+        {[['facebook','Facebook Post'],['instagram','Instagram Caption'],['campaign','Full Campaign'],['sms','SMS Campaign']].map(([type,label])=>(
+          <button key={type} style={{...btn(C.red,active!==type),padding:'12px 16px',fontSize:13,textAlign:'left'}} onClick={()=>generate(type)}>{label}</button>
+        ))}
+      </div>
+      {active&&(
+        <div style={{...card,background:'#0A0908'}}>
+          <div style={{display:'flex',justifyContent:'space-between',marginBottom:10}}>
+            <span style={{...bdg(C.red),fontSize:10}}>{active.toUpperCase()}</span>
+            <span style={{fontSize:11,color:C.text3}}>{running?'Generating...':'Done'}</span>
+          </div>
+          <pre style={{fontSize:13,color:C.text2,whiteSpace:'pre-wrap',lineHeight:1.7,fontFamily:'inherit'}}>{display}{running?'|':''}</pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AdminIntelligence(){
+  const {data:dash,loading:dL,error:dE}=useGAS('getDashboard');
+  const {data:pl,loading:pL}=useGAS('getPL');
+  const mtd=(pl||{}).mtd||{};
+  const d=dash||{};
+  const pct=d.monthRevenue?Math.min(100,Math.round((d.monthRevenue/100000)*100)):0;
+  return(
+    <div>
+      <GASNote error={dE}/>
+      <span style={lbl}>Analytics</span><h2 style={h2s}>Business Intelligence</h2>
+      {(dL&&!dash)||(pL&&!pl)?<Spin/>:(
+      <>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:20}}>
+        {[['Revenue MTD','\u20b1'+(d.monthRevenue||0).toLocaleString(),C.green],
+          ['Target','\u20b1100,000',C.text2],
+          ['Progress',pct+'%',C.gold],
+          ['Active Members',d.activeMembers||'\u2014',C.text],
+          ['Open Leads',d.openLeads||'\u2014',C.red],
+          ['Avg Rating',d.avgRating||'\u2014',C.green],
+        ].map(([l,v,color])=>(
+          <div key={l} style={metric}><div style={{fontSize:11,color:C.text3,marginBottom:4}}>{l}</div><div style={{fontSize:22,fontWeight:700,color}}>{v}</div></div>
+        ))}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Revenue vs. Target</div>
+          <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.text2,marginBottom:5}}>
+            <span>{'\u20b1'+(d.monthRevenue||0).toLocaleString()}</span><span>{pct}%</span>
+          </div>
+          <div style={{height:5,background:C.elev,borderRadius:3,marginBottom:14}}>
+            <div style={{height:'100%',background:pct>=100?C.green:C.gold,borderRadius:3,width:pct+'%'}}/>
+          </div>
+          <div style={{fontWeight:600,marginBottom:8,fontSize:13}}>P&L Summary (MTD)</div>
+          {[['Revenue','\u20b1'+(mtd.revenue||0).toLocaleString(),C.green],
+            ['Expenses','\u20b1'+(mtd.expenses||0).toLocaleString(),C.red],
+            ['Net Profit','\u20b1'+(mtd.net||0).toLocaleString(),C.gold]].map(([l,v,c])=>(
+            <div key={l} style={{display:'flex',justifyContent:'space-between',fontSize:12,padding:'5px 0',borderBottom:`1px solid ${C.border}`}}>
+              <span style={{color:C.text2}}>{l}</span><span style={{color:c,fontWeight:600}}>{v}</span>
+            </div>
+          ))}
+        </div>
+        <div style={card}>
+          <div style={{fontWeight:600,marginBottom:10,fontSize:13}}>Monthly Revenue Trend</div>
+          {((pl||{}).trend||[]).map((t,i)=>{
+            const maxR=Math.max(...((pl||{}).trend||[{revenue:1}]).map(x=>x.revenue||0),1);
+            return(
+              <div key={i} style={{marginBottom:8}}>
+                <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:C.text2,marginBottom:3}}>
+                  <span>{t.month}</span><span>{'\u20b1'+(t.revenue||0).toLocaleString()}</span>
+                </div>
+                <div style={{height:3,background:C.elev,borderRadius:2}}><div style={{height:'100%',background:C.green,borderRadius:2,width:Math.round(((t.revenue||0)/maxR)*100)+'%'}}/></div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      </>
+      )}
+    </div>
+  );
+}
+
+function AdminAIConsole(){
+  const [query,setQuery]=useState(null);
+  const {display,running,startTyping}=useTypewriter(10);
+  const run=(type)=>{setQuery(type);setTimeout(()=>startTyping(AI_OUTPUTS[type]),800);};
+  return(
+    <div>
+      <span style={lbl}>Intelligence</span><h2 style={h2s}>AI Console</h2>
+      <p style={{color:C.text2,fontSize:14,marginBottom:20}}>Run AI-powered analysis on Iron Tribe data. Select a query to generate insights.</p>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10,marginBottom:20}}>
+        {[['retention','Retention Analysis'],['revenue','Revenue Intelligence'],['leads','Lead Intelligence']].map(([type,label])=>(
+          <button key={type} style={{...btn(C.red,query!==type),padding:'12px 16px',fontSize:13}} onClick={()=>run(type)}>{label}</button>
+        ))}
+      </div>
+      {query&&(
+        <div style={{...card,background:'#0A0908'}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+            <span style={{...bdg(C.red),fontSize:10}}>AI ANALYSIS</span>
+            <span style={{fontSize:11,color:C.text3}}>{running?'Analyzing data...':'Analysis complete'}</span>
+          </div>
+          <pre style={{fontSize:13,color:C.text2,whiteSpace:'pre-wrap',lineHeight:1.7,fontFamily:'inherit'}}>{display}{running?'|':''}</pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AdminSettings(){
+  const {data:settings,loading,error,refresh}=useGAS('getSettings');
+  const [form,setForm]=useState({});
+  const {mutate,loading:saving}=useMutation();
+  useEffect(()=>{if(settings)setForm({...settings,
+  monthlyPlan:phpToUsdValue(settings.monthlyPlan),
+  quarterlyPlan:phpToUsdValue(settings.quarterlyPlan),
+  annualPlan:phpToUsdValue(settings.annualPlan),
+  currency:'USD'
+});},[JSON.stringify(settings)]);
+  const sf=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
+  const save=async()=>{
+  const storageSettings={...form,
+    monthlyPlan:usdToPhpValue(form.monthlyPlan),
+    quarterlyPlan:usdToPhpValue(form.quarterlyPlan),
+    annualPlan:usdToPhpValue(form.annualPlan),
+    currency:'PHP'
+  };
+  await mutate('saveSettings',{settings:storageSettings});refresh();
+};
+  const groups=[
+    {label:'Gym Information',keys:['gymName','address','phone','email','facebook','instagram']},
+    {label:'Business Hours',keys:['openTime','closeTime']},
+    {label:'Membership Pricing',keys:['monthlyPlan','quarterlyPlan','annualPlan']},
+    {label:'System',keys:['currency','taxRate','pinCode']},
+  ];
+  const labels={gymName:'Gym Name',address:'Address',phone:'Phone',email:'Email',facebook:'Facebook URL',instagram:'Instagram URL',openTime:'Opening Time',closeTime:'Closing Time',monthlyPlan:'Monthly Plan (USD)',quarterlyPlan:'Quarterly Plan (USD)',annualPlan:'Annual Plan (USD)',currency:'Currency',taxRate:'Tax Rate (decimal)',pinCode:'Operator PIN'};
+  return(
+    <div>
+      <GASNote error={error}/>
+      <span style={lbl}>Configuration</span><h2 style={h2s}>Settings</h2>
+      {loading&&!settings?<Spin/>:(
+      <div style={{display:'flex',flexDirection:'column',gap:14}}>
+        {groups.map(g=>(
+          <div key={g.label} style={card}>
+            <div style={{fontWeight:600,marginBottom:14,fontSize:14}}>{g.label}</div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+              {g.keys.map(k=>(
+                <div key={k}>
+                  <div style={{fontSize:11,color:C.text2,marginBottom:5,textTransform:'uppercase',letterSpacing:'0.05em',fontWeight:600}}>{labels[k]||k}</div>
+                  <input value={form[k]||''} onChange={sf(k)} style={{fontSize:13}} type={k==='pinCode'?'password':'text'}/>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        <button style={{...btn(),fontSize:13,padding:'10px 20px',alignSelf:'flex-start'}} onClick={save} disabled={saving}>
+          {saving?'Saving...':'Save All Settings'}
+        </button>
+      </div>
+      )}
+    </div>
+  );
+}
+
+
+function AdminSuite(){
+  const [unlocked,setUnlocked]=useState(false);
+  const [pin,setPin]=useState('');
+  const [panel,setPanel]=useState('dashboard');
+  if(!unlocked)return(
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'calc(100vh - 56px)',background:C.bg}}>
+      <div style={{...card,maxWidth:320,width:'90%',textAlign:'center',padding:'36px 28px'}}>
+        <div style={{...DISPLAY,fontSize:26,color:C.red,marginBottom:4}}>OPERATOR SUITE</div>
+        <div style={{fontSize:11,color:C.text3,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:24}}>Iron Tribe · Restricted Access</div>
+        <input type="password" placeholder="Enter operator code" value={pin} onChange={e=>setPin(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'){if(pin==='irontribe2026')setUnlocked(true);else setPin('');}}} style={{marginBottom:12,textAlign:'center',letterSpacing:'0.2em'}}/>
+        <button style={{...btn(),width:'100%',fontSize:13}} onClick={()=>{if(pin==='irontribe2026')setUnlocked(true);else setPin('');}}>Enter</button>
+        <div style={{fontSize:11,color:C.text3,marginTop:16}}>Authorized personnel only</div>
+      </div>
+      </div>
+  );
+  const nav=[['dashboard','Dashboard'],['pl','P&L'],['leads','Leads'],['members','Members'],['coaches','Coaches'],['bookings','Bookings'],['challenges','Challenges'],['reviews','Reviews'],['marketing','Marketing'],['intelligence','Intelligence'],['ai','AI Console'],['settings','Settings']];
+  const panels={dashboard:AdminDashboard,pl:AdminPL,leads:AdminLeads,members:AdminMembers,coaches:AdminCoaches,bookings:AdminBookings,challenges:AdminChallenges,reviews:AdminReviews,marketing:AdminMarketing,intelligence:AdminIntelligence,ai:AdminAIConsole,settings:AdminSettings};
+  const Panel=panels[panel]||AdminDashboard;
+  return(
+    <div style={{display:'flex',height:'calc(100vh - 56px)'}}>
+      <div style={{width:200,background:'#060604',borderRight:`1px solid ${C.border}`,padding:'16px 10px',flexShrink:0,overflowY:'auto'}}>
+        {nav.map(([k,l])=>(
+          <div key={k} onClick={()=>setPanel(k)} style={{padding:'9px 12px',borderRadius:8,marginBottom:3,cursor:'pointer',fontSize:13,background:panel===k?C.redDim:'transparent',color:panel===k?C.red:C.text2,fontWeight:panel===k?600:400,userSelect:'none'}}>{l}</div>
+        ))}
+      </div>
+      <div style={{flex:1,overflowY:'auto',padding:'28px 32px'}}><Panel/></div>
+    </div>
+  );
+}
+
+function Footer({goTo}){
+  return(
+    <footer style={{background:'#060604',borderTop:`1px solid ${C.border}`,padding:'36px 28px 24px'}}>
+      <div style={{maxWidth:1100,margin:'0 auto',display:'grid',gridTemplateColumns:'1.5fr 1fr 1fr',gap:32,marginBottom:24}}>
+        <div>
+          <div style={{...DISPLAY,color:C.red,fontSize:20,marginBottom:10}}>IRON TRIBE FITNESS GYM</div>
+          <div style={{fontSize:13,color:C.text3,lineHeight:1.8}}>4F Noli Rose Bldg, 474 J.P. Laurel Hwy<br/>Poblacion, Malvar, Batangas 4233<br/>+63 956 700 7785<br/>Open 8:00 AM – 10:00 PM daily</div>
+        </div>
+        <div>
+          <div style={{fontSize:11,fontWeight:700,color:C.text2,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.08em'}}>Pages</div>
+          {[['home','Home'],['memberships','Memberships'],['coaching','Coaching'],['classes','Classes'],['transformations','Results'],['about','About'],['contact','Contact'],['faq','FAQ']].map(([p,l])=>(
+            <div key={p} onClick={()=>goTo(p)} style={{fontSize:13,color:C.text3,marginBottom:7,cursor:'pointer'}}>{l}</div>
+          ))}
+        </div>
+        <div>
+          <div style={{fontSize:11,fontWeight:700,color:C.text2,marginBottom:12,textTransform:'uppercase',letterSpacing:'0.08em'}}>Get Started</div>
+          <div style={{fontSize:13,color:C.text3,lineHeight:1.8,marginBottom:16}}>Free body assessment — no commitment required. We'll match you with the right coach and program from day one.</div>
+          <button style={{...btn(),fontSize:13,padding:'10px 18px'}} onClick={()=>goTo('join')}>Book Free Assessment</button>
+        </div>
+      </div>
+      <div style={{maxWidth:1100,margin:'0 auto',paddingTop:16,borderTop:`1px solid ${C.border}`,display:'flex',justifyContent:'space-between',fontSize:11,color:C.text3}}>
+        <span>© 2026 Iron Tribe Fitness Gym · Malvar, Batangas</span>
+        <span>Powered by <span style={{color:C.red}}>Aurora Digital Foundry</span></span>
+      </div>
+    </footer>
+  );
+}
+
+function App(){
+  const [page,setPage]=useState('home');
+  const [adminMode,setAdminMode]=useState(false);
+  const goTo=(p)=>{setPage(p);window.scrollTo(0,0);};
+  const pages={
+    home:<HomePage goTo={goTo}/>,
+    memberships:<MembershipsPage goTo={goTo}/>,
+    coaching:<CoachingPage goTo={goTo}/>,
+    classes:<ClassesPage/>,
+    transformations:<TransformationsPage goTo={goTo}/>,
+    about:<AboutPage goTo={goTo}/>,
+    contact:<ContactPage/>,
+    join:<JoinPage goTo={goTo}/>,
+    stories:<StoriesPage goTo={goTo}/>,
+    faq:<FAQPage/>,
+  };
+  return(
+    <div style={{background:C.bg,minHeight:'100vh',color:C.text,display:'flex',flexDirection:'column'}}>
+      <NavBar page={page} goTo={goTo} adminMode={adminMode} setAdminMode={setAdminMode}/>
+      <div style={{flex:1}}>{adminMode?<AdminSuite/>:(pages[page]||pages.home)}</div>
+      {!adminMode&&<Footer goTo={goTo}/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
+ +(Number(n)*PHP_TO_USD).toLocaleString('en-US',{minimumFractionDigits:(Number(n)*PHP_TO_USD)<100?2:0,maximumFractionDigits:2});
+const phpToUsdValue=n=>n===undefined||n===null||n===''?'':(Number(n)*PHP_TO_USD).toFixed(2);
+const usdToPhpValue=n=>n===undefined||n===null||n===''?'':(Number(n)*USD_TO_PHP).toFixed(2);
+const METRICS={mtdRevenue:87500,target:100000,active:67,atRisk:5,leads:7,trials:4,conversions:11,conversionRate:73,attendanceToday:31,attendancePct:46};
+
+const REVIEWS=[
+  {name:'Maria Santos',rating:5,date:'Jun 5',text:'Coach Ana completely changed how I think about training. Down 6kg in 3 months and I actually understand why. The check-ins keep me accountable like nothing else has.',plan:'Regular Monthly'},
+  {name:'Carlo Reyes',rating:5,date:'May 28',text:"Hit a 100kg squat for the first time yesterday. Coach Jun's programming is systematic and it works. This gym is the real deal.",plan:'Annual'},
+  {name:'Jennica Aquino',rating:5,date:'Jun 1',text:"As a student I was worried about the cost but the student plan is worth every cent. The body scan every month shows the actual progress — not just the scale.",plan:'Student Monthly'},
+  {name:'Jason Bautista',rating:5,date:'Jun 3',text:"I've tried 3 gyms in Batangas. None of them had this level of structure and coaching. Iron Tribe is in a different category.",plan:'Annual'},
+  {name:'Liza Torres',rating:4,date:'May 20',text:"Coach Rica's HIIT class is unreal. I book 2 weeks in advance because it fills up so fast. Would recommend to anyone who wants to actually sweat.",plan:'Regular Monthly'},
+];
+
+const CHALLENGES=[
+  {name:'June Iron Month Challenge',status:'Active',participants:24,start:'Jun 1',end:'Jun 30',prize:'Free Month + Merchandise',leader:'Maria Santos',score:97},
+  {name:'30-Day Fat Loss Sprint',status:'Active',participants:18,start:'Jun 9',end:'Jul 8',prize:'Free Body Comp Package',leader:'Jennica Aquino',score:94},
+  {name:'May Strength Leaderboard',status:'Completed',participants:31,start:'May 1',end:'May 31',prize:'Free Month',leader:'Carlo Reyes',score:100},
+];
+
+const FAQ_ITEMS=[
+  {q:'What is included in the free body assessment?',a:'Full body composition scan (weight, BMI, muscle mass, body fat %), a 15-minute consultation with your assigned coach, a recommended program based on your goals, and a plan recommendation. No commitment required.'},
+  {q:'How much does membership cost?',a:'Student Monthly: $12.82/month (valid student ID required). Regular Monthly: $16.02/month. Annual Regular: $128/year. Annual Student: $96.24/year. All plans include unlimited gym access, free body assessment, and twice-weekly coach check-ins.'},
+  {q:'What are your business hours?',a:"We're open Monday through Sunday, 8:00 AM to 10:00 PM daily. Holiday hours may vary — we'll post any changes on our Facebook and Instagram pages."},
+  {q:'Can I freeze my membership?',a:'Yes. All plans allow you to freeze your membership up to 2 times per year, for a maximum of 1 month per freeze. Just notify us before your freeze period starts.'},
+  {q:'Do I need to book classes in advance?',a:"We recommend booking in advance for popular classes, especially Coach Rica's Evening HIIT sessions, which regularly fill up. Regular and Annual members get priority booking."},
+  {q:'Will I be assigned a personal coach?',a:'Yes. Every member is assigned a primary coach based on your goals and schedule at the time of assessment. Your coach conducts check-ins twice a week, reviews your progress, and adjusts your program as needed.'},
+  {q:'What payment methods do you accept?',a:"We accept GCash, Maya, credit/debit card, and QR Ph. Cash is also accepted at the gym. Online checkout uses PayMongo's secure payment gateway."},
+  {q:"I'm a complete beginner. Is Iron Tribe for me?",a:'Absolutely. Iron Tribe was built for students and adults of all fitness levels. Your coach will design a program that starts where you are — not where someone else is.'},
+];
+
+const MARKETING_OUTPUTS={
+  facebook:`FACEBOOK POST — Iron Tribe June Update\n\n67 members. 4 coaches. One gym built for Malvar.\n\nThis June we hit 87,500 in membership revenue — and we are not done.\n\nBut the number that matters more? 94% retention. That means people join Iron Tribe and they STAY.\n\nWhy?\n- Every member gets a dedicated coach\n- Weekly progress tracking with body comp scans\n- A community that keeps you accountable\n\nNext batch of free body assessments opens July 1. Limited to 12 spots.\n\n4F Noli Rose Bldg, J.P. Laurel Hwy, Malvar, Batangas\n+63 956 700 7785\n\n#IronTribe #IronTribeMalvar #MalvarBatangas #GymLife`,
+  instagram:`INSTAGRAM CAPTION\n\n73% of people who walk through our doors become members.\n\nNot because of a sales pitch.\n\nBecause of this:\n- Free body composition scan on day 1\n- Dedicated coach from day 1\n- Program designed around YOUR goals, not a template\n\nThe assessment is free. The transformation is earned.\n\nBook yours through the link in bio.\n\n#IronTribeFitness #MalvarBatangas #FitnessGym #CoachingGym`,
+  campaign:`SOCIAL MEDIA CAMPAIGN — June 2026\n\nCAMPAIGN: "Iron Tribe June Challenge"\nDuration: June 9–30 · Platform: Facebook + Instagram\n\nWEEK 1 (Jun 9–15) — ANNOUNCE:\n· Post 1 (Tue): Iron Month challenge leaderboard reveal\n· Post 2 (Thu): Transformation story — Maria Santos (-6kg)\n· Post 3 (Sat): Community energy recap from Saturday class\n\nWEEK 2 (Jun 16–22) — EDUCATE:\n· Post 4 (Mon): "Why your gym needs a coach, not just equipment"\n· Post 5 (Wed): Coach spotlight — Coach Paolo calisthenics highlight\n· Post 6 (Fri): Member milestone shoutout\n\nWEEK 3 (Jun 23–30) — CONVERT:\n· Post 7 (Mon): Final 30-day challenge enrollment push\n· Post 8 (Wed): July promo preview\n· Post 9 (Sat): Iron Month final leaderboard + prize announcement\n\nCaption tone: Supportive, energetic, community-first.`,
+  sms:`SMS CAMPAIGN — June Promo\n\nBatch 1 — New Leads:\n"Hi [Name]! Iron Tribe here. Your free body assessment slot is still open this week. Reply YES to confirm — takes only 30 mins. Malvar, Batangas"\n\nBatch 2 — At-Risk Members:\n"Hey [Name], Coach [X] noticed you have been busy lately. Your slot is saved — come back anytime this week and let us check in on your progress."\n\nBatch 3 — Annual Renewal:\n"Hi [Name]! Your Iron Tribe membership renews this month. Renew now and lock in the current rate + get a free body comp scan. Reply RENEW."`,
+};
+
+const AI_OUTPUTS={
+  retention:`RETENTION ANALYSIS — June 2026\n\nCurrent retention rate: 94% (Industry avg: 71%)\n\nAT-RISK MEMBERS FLAGGED (attendance below 50%):\n· Maria Cruz — 32% attendance · Last visit: Jun 1 · Coach Rica\n· Benj Ocampo — 41% attendance · Last visit: Jun 2 · Coach Jun\n\nRECOMMENDED ACTIONS:\n1. Immediate: Assigned coaches send personal check-in messages today\n2. Offer a complimentary re-assessment to both members\n3. If no response in 48hrs, trigger an Iron Tribe comeback call\n\nRETENTION RISK BY COACH:\n· Coach Jun: 1 at-risk member (4% of roster)\n· Coach Rica: 1 at-risk member (8% of roster)\n· Coach Ana: 0 at-risk members\n· Coach Paolo: 0 at-risk members\n\nPROJECTED IMPACT:\nIf both members churn: -1,998/month recurring\nCost of re-engagement: ~2 hours coach time\nROI of intervention: High — act today.`,
+  revenue:`REVENUE INTELLIGENCE — June 2026\n\nMTD REVENUE: 87,500\nTARGET: 100,000\nGAP: 12,500 (21 days remaining)\n\nTO CLOSE THE GAP:\n· 12-13 new Regular Monthly memberships, OR\n· 1-2 Annual memberships, OR\n· Mix: 1 Annual + 4 Regular conversions\n\nCURRENT PIPELINE:\n· 7 active leads in system\n· 4 trials scheduled this week\n· Historical trial-to-close rate: 73%\n\nPROJECTED FROM PIPELINE: ~3 conversions = 3,000-8,000\nGap after pipeline: 4,500-9,500\n\nRECOMMENDATION:\nActivate June referral push — current members + social media.\nOne referral campaign historically generates 4-6 leads in 7 days.\n\nHigh probability of hitting 100,000 target if executed.`,
+  leads:`LEAD INTELLIGENCE — Current Pipeline\n\nTOTAL ACTIVE LEADS: 8\n\nHIGH PRIORITY — Contact today:\n\n1. Carla Mendez — Trial Booked\n   Source: Walk-in · Interest: Annual Plan\n   Action: Confirm trial time, prep assessment materials.\n\n2. Ryan Santos — Assessment Done\n   Source: Referral · Interest: Student Monthly\n   Action: Send follow-up with student plan details + GCash link.\n\n3. Leo Fernandez — Proposal Sent\n   Source: Referral · Interest: Annual Plan · 4 days no response\n   Action: Call today. Offer to answer questions directly.\n\nNEW LEADS — Same-day contact required:\n· Nico Bautista (Facebook) — assign to Coach Jun\n· Ella Torres (Instagram) — assign to Coach Ana\n· Anna Villanueva (Walk-in) — already on-site, prioritize now`,
+};
+
+function useTypewriter(speed=10){
+  const [display,setDisplay]=useState('');
+  const [running,setRunning]=useState(false);
+  const ref=useRef(null);
+  const startTyping=useCallback((text)=>{
+    setDisplay('');setRunning(true);
+    let i=0;
+    if(ref.current)clearInterval(ref.current);
+    ref.current=setInterval(()=>{
+      i++;setDisplay(text.slice(0,i));
+      if(i>=text.length){clearInterval(ref.current);setRunning(false);}
+    },speed);
+  },[speed]);
+  useEffect(()=>()=>{if(ref.current)clearInterval(ref.current);},[]);
+  return{display,running,startTyping};
+}
+
+
+const REACT_CONFIG={GAS_URL:''};
+
+function useGAS(action,params,trigger){
+  const [data,setData]=useState(null);
+  const [loading,setLoading]=useState(true);
+  const [error,setError]=useState(null);
+  const [rev,setRev]=useState(0);
+  const refresh=useCallback(()=>setRev(r=>r+1),[]);
+  useEffect(()=>{
+    if(!REACT_CONFIG.GAS_URL){setLoading(false);setError('GAS_URL not configured — see DEPLOY.md');return;}
+    setLoading(true);setError(null);
+    const qs=new URLSearchParams({action,...(params||{})}).toString();
+    fetch(REACT_CONFIG.GAS_URL+'?'+qs)
+      .then(r=>r.json())
+      .then(r=>{if(r.ok)setData(r.data);else setError(r.error);})
+      .catch(e=>setError(e.message))
+      .finally(()=>setLoading(false));
+  },[rev,trigger||0]);
+  return{data,loading,error,refresh};
+}
+
+function useMutation(){
+  const [loading,setLoading]=useState(false);
+  const mutate=async(action,payload)=>{
+    if(!REACT_CONFIG.GAS_URL)throw new Error('GAS_URL not configured');
+    setLoading(true);
+    try{
+      const r=await fetch(REACT_CONFIG.GAS_URL,{method:'POST',body:JSON.stringify({action,...payload})});
+      const j=await r.json();
+      if(!j.ok)throw new Error(j.error);
+      return j.data;
+    }finally{setLoading(false);}
+  };
+  return{mutate,loading};
+}
+
+function Spin(){return <div style={{padding:'36px',textAlign:'center',color:C.text3,fontSize:13}}>Loading...</div>;}
+
+function GASNote({error}){
+  if(!error)return null;
+  if(error.includes('GAS_URL'))return(
+    <div style={{...card,border:`1px solid ${C.gold}`,marginBottom:16}}>
+      <b style={{color:C.gold,fontSize:13}}>Backend not connected</b>
+      <div style={{fontSize:12,color:C.text2,marginTop:4}}>Set REACT_CONFIG.GAS_URL to your GAS deployment URL. See DEPLOY.md.</div>
+    </div>
+  );
+  return <div style={{...card,border:`1px solid ${C.red}`,marginBottom:16,fontSize:12,color:C.red}}>{error}</div>;
+}
+
+function Modal({onClose,title,children}){
+  return(
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.78)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:16}} onClick={onClose}>
+      <div style={{...card,maxWidth:500,width:'100%',maxHeight:'88vh',overflowY:'auto',border:`1px solid ${C.borderBright}`}} onClick={e=>e.stopPropagation()}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
+          <b style={{fontSize:15}}>{title}</b>
+          <button onClick={onClose} style={{background:'none',border:'none',color:C.text2,fontSize:22,cursor:'pointer',padding:'0 4px'}}>x</button>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function FR({label,children}){return <div style={{marginBottom:12}}><div style={{fontSize:11,color:C.text2,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:5}}>{label}</div>{children}</div>;}
+function FI({v,sv,ph,type}){return <input value={v||''} onChange={e=>sv(e.target.value)} placeholder={ph||''} type={type||'text'} style={{fontSize:13}}/>;}
+function FS({v,sv,opts}){return <select value={v||''} onChange={e=>sv(e.target.value)} style={{fontSize:13}}>{opts.map(o=><option key={o} value={o}>{o}</option>)}</select>;}
+
+
+function NavBar({page,goTo,adminMode,setAdminMode}){
+  const links=[['home','Home'],['memberships','Memberships'],['coaching','Coaching'],['classes','Classes'],['transformations','Results'],['stories','Stories'],['about','About'],['faq','FAQ']];
+  if(adminMode)return(
+    <nav style={{background:'#0A0908',borderBottom:`1px solid ${C.border}`,padding:'0 24px',height:56,display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:100}}>
+      <div style={{display:'flex',alignItems:'center',gap:10}}>
+        <span style={{...bdg(C.red),fontSize:10}}>OPERATOR SUITE</span>
+        <span style={{fontWeight:700,fontSize:14}}>Iron Tribe Admin</span>
+      </div>
+      <button style={{...btn(C.red,true),fontSize:13,padding:'7px 14px'}} onClick={()=>setAdminMode(false)}>Exit Admin</button>
+    </nav>
+  );
+  return(
+    <nav style={{background:C.card,borderBottom:`1px solid ${C.border}`,padding:'0 20px',height:56,display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:100}}>
+      <div style={{display:'flex',alignItems:'center',gap:6,cursor:'pointer'}} onClick={()=>goTo('home')}>
+        <span style={{...DISPLAY,color:C.red,fontWeight:800,fontSize:18}}>IRON TRIBE</span>
+        <span style={{color:C.text3,fontSize:11,marginLeft:4}}>FITNESS GYM</span>
+      </div>
+      <div style={{display:'flex',gap:2}}>
+        {links.map(([p,l])=>(
+          <span key={p} onClick={()=>goTo(p)} style={{cursor:'pointer',fontSize:13,color:page===p?C.text:C.text2,background:page===p?C.hover:'transparent',padding:'6px 10px',borderRadius:6,userSelect:'none'}}>{l}</span>
+        ))}
+      </div>
+      <div style={{display:'flex',gap:8}}>
+        <button style={{...btn(),fontSize:13,padding:'8px 14px'}} onClick={()=>goTo('join')}>Book Assessment</button>
+        <button style={{...btn(C.red,true),fontSize:12,padding:'7px 12px'}} onClick={()=>setAdminMode(true)}>Operator</button>
+      </div>
+    </nav>
+  );
+}
+
+function HomePage({goTo}){
+  return(
+    <div>
+      <div style={{...sec,paddingTop:72,paddingBottom:64}}>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:56,alignItems:'center'}}>
+          <div>
+            <span style={lbl}>Malvar, Batangas · Est. 2023</span>
+            <h1 style={{...DISPLAY,fontSize:64,fontWeight:800,lineHeight:1.0,margin:'10px 0 20px'}}>The Fitness Home<br/><span style={{color:C.red}}>for Malvar.</span></h1>
+            <p style={{color:C.text2,fontSize:15,lineHeight:1.7,marginBottom:28}}>Iron Tribe is a coaching-led training environment. Every member gets a dedicated coach, a structured program, and a community that keeps you accountable.</p>
+            <div style={{display:'flex',gap:10,marginBottom:14}}>
+              <button style={{...btn(),padding:'13px 26px',fontSize:14}} onClick={()=>goTo('join')}>Book Free Assessment</button>
+              <button style={{...btn(C.red,true),padding:'13px 26px',fontSize:14}} onClick={()=>goTo('memberships')}>View Plans</button>
+            </div>
+            <div style={{fontSize:12,color:C.text3}}>4F Noli Rose Bldg, 474 J.P. Laurel Hwy, Malvar · Open 8AM–10PM Daily</div>
+          </div>
+          <div style={{position:'relative'}}>
+            <img src={PHOTOS.gymWide} alt="Iron Tribe Fitness Gym — Malvar, Batangas" style={{width:'100%',height:420,objectFit:'cover',borderRadius:16,display:'block'}}/>
+            <div style={{position:'absolute',bottom:16,left:16,background:'rgba(7,7,9,0.75)',backdropFilter:'blur(8px)',borderRadius:8,padding:'8px 14px',fontSize:11,color:C.text2,letterSpacing:'0.05em'}}>Iron Tribe · Malvar, Batangas</div>
+          </div>
+        </div>
+      </div>
+      <div style={{background:C.card,borderTop:`1px solid ${C.border}`,borderBottom:`1px solid ${C.border}`}}>
+        <div style={{maxWidth:1100,margin:'0 auto',padding:'22px 28px',display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:24}}>
+          {[['67+','Active Members'],['4','Expert Coaches'],['8','Weekly Classes'],['94%','Retention Rate']].map(([v,l])=>(
+            <div key={l} style={{textAlign:'center'}}>
+              <div style={{...DISPLAY,fontSize:32,color:C.red}}>{v}</div>
+              <div style={{fontSize:12,color:C.text2}}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={sec}>
+        <span style={lbl}>What We Offer</span>
+        <h2 style={h1s}>Training Programs</h2>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:14}}>
+          {[['Strength & Conditioning','Barbell-based programming for real, measurable strength gains.','coaching'],
+            ['Nutrition & Body Comp','Evidence-based nutrition coaching paired with smart training.','coaching'],
+            ['Calisthenics & Skills','From first pull-up to advanced skills — progressive bodyweight mastery.','coaching'],
+            ['Group HIIT Classes',"High-energy group sessions — Coach Rica's HIIT consistently sells out.",'classes'],
+          ].map(([title,desc,target])=>(
+            <div key={title} style={{...card,cursor:'pointer'}} onClick={()=>goTo(target)}>
+              <div style={{fontWeight:700,fontSize:15,marginBottom:6}}>{title}</div>
+              <div style={{fontSize:13,color:C.text2,lineHeight:1.6,marginBottom:12}}>{desc}</div>
+              <span style={{color:C.red,fontSize:13,fontWeight:600}}>Explore</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{padding:'0 28px 56px'}}>
+        <div style={{maxWidth:1100,margin:'0 auto',display:'grid',gridTemplateColumns:'2fr 1fr 1fr',gap:8,borderRadius:16,overflow:'hidden'}}>
+          <img src={PHOTOS.gymFloor} alt="Iron Tribe gym floor" style={{width:'100%',height:320,objectFit:'cover',display:'block'}}/>
+          <img src={PHOTOS.portrait1} alt="Iron Tribe training" style={{width:'100%',height:320,objectFit:'cover',display:'block'}}/>
+          <img src={PHOTOS.gymWide} alt="Iron Tribe fitness floor" style={{width:'100%',height:320,objectFit:'cover',display:'block'}}/>
+        </div>
+      </div>
+      <div style={{background:C.card,borderTop:`1px solid ${C.border}`,padding:'56px 28px'}}>
+        <div style={{maxWidth:1100,margin:'0 auto'}}>
+          <span style={lbl}>Simple Pricing</span>
+          <h2 style={h1s}>Membership Plans</h2>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:14}}>
+            {[{name:'Student Monthly',price:'799',per:'/mo',color:C.border,tag:''},
+              {name:'Regular Monthly',price:'999',per:'/mo',color:C.red,tag:'Most Popular'},
+              {name:'Annual Plan',price:'8,000',per:'/yr',color:C.gold,tag:'Best Value'},
+            ].map(p=>(
+              <div key={p.name} style={{...card,border:`2px solid ${p.color}`,position:'relative'}}>
+                {p.tag&&<div style={{...bdg(p.color===C.border?C.text2:p.color),position:'absolute',top:-10,left:16,fontSize:10}}>{p.tag}</div>}
+                <div style={{fontSize:13,color:C.text2,marginBottom:4}}>{p.name}</div>
+                <div style={{fontSize:30,fontWeight:800}}>{usd(p.price)}<span style={{fontSize:13,fontWeight:400,color:C.text2}}>{p.per}</span></div>
+                <button style={{...btn(p.color===C.border?C.red:p.color),width:'100%',marginTop:14,fontSize:13}} onClick={()=>goTo('join')}>Get Started</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div style={{padding:'72px 28px',textAlign:'center'}}>
+        <span style={lbl}>Start Here</span>
+        <h2 style={{...DISPLAY,fontSize:48,margin:'10px 0 16px'}}>Free Body Assessment</h2>
+        <p style={{color:C.text2,maxWidth:420,margin:'0 auto 28px',fontSize:14,lineHeight:1.7}}>Full body comp scan + coach consult + program recommendation. No commitment required.</p>
+        <button style={{...btn(),padding:'14px 32px',fontSize:15}} onClick={()=>goTo('join')}>Book My Assessment</button>
+      </div>
+    </div>
+  );
+}
+
+function MembershipsPage({goTo}){
+  const plans=[
+    {name:'Student Monthly',price:799,per:'month',color:C.purple,includes:['Unlimited gym access','Free body assessment','Coach check-ins 2x/week','Class booking access','Student ID required']},
+    {name:'Regular Monthly',price:999,per:'month',color:C.red,featured:true,includes:['Everything in Student','Priority class booking','Monthly progress report','Nutrition guidance','No student ID required']},
+    {name:'Annual Regular',price:8000,per:'year',color:C.gold,includes:['Everything in Regular','2x free body comp scans','Annual progress review','Save $63.96 vs monthly','Priority coach access']},
+    {name:'Annual Student',price:6000,per:'year',color:C.blue,includes:['Everything in Student','2x free body comp scans','Save $57.55 vs monthly','Annual review session','Valid student ID required']},
+  ];
+  return(
+    <div style={sec}>
+      <span style={lbl}>Pricing</span>
+      <h1 style={h1s}>Membership Plans</h1>
+      <p style={{color:C.text2,marginBottom:36,fontSize:14}}>All plans include a dedicated coach, free body assessment, and unlimited gym access. No hidden fees.</p>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:18}}>
+        {plans.map(p=>(
+          <div key={p.name} style={{...card,border:`2px solid ${p.color}`,position:'relative'}}>
+            {p.featured&&<div style={{...bdg(C.red),position:'absolute',top:-10,left:20,fontSize:10}}>Most Popular</div>}
+            <div style={{fontSize:13,color:C.text2}}>{p.name}</div>
+            <div style={{fontSize:36,fontWeight:800,margin:'6px 0'}}>{usd(p.price)}<span style={{fontSize:13,fontWeight:400,color:C.text2}}>/{p.per}</span></div>
+            <div style={{borderTop:`1px solid ${C.border}`,paddingTop:14,marginTop:14}}>
+              {p.includes.map(i=><div key={i} style={{fontSize:13,color:C.text2,padding:'3px 0',display:'flex',gap:8}}><span style={{color:C.green}}>✓</span>{i}</div>)}
+            </div>
+            <button style={{...btn(p.featured?C.red:undefined,!p.featured),width:'100%',marginTop:18,fontSize:13}} onClick={()=>goTo('join')}>Get {p.name}</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CoachingPage({goTo}){
+  const [active,setActive]=useState(null);
+  return(
+    <div style={sec}>
+      <span style={lbl}>Our Team</span>
+      <h1 style={h1s}>Expert Coaches</h1>
+      <p style={{color:C.text2,marginBottom:36,fontSize:14}}>Every member gets an assigned primary coach — your program designer, progress tracker, and accountability partner.</p>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:18}}>
+        {COACHES.map(c=>(
+          <div key={c.id} style={{...card,cursor:'pointer',border:`1px solid ${active===c.id?c.color:C.border}`}} onClick={()=>setActive(active===c.id?null:c.id)}>
+            <div style={{display:'flex',gap:14,marginBottom:14}}>
+              <div style={{width:48,height:48,borderRadius:'50%',background:`${c.color}20`,border:`2px solid ${c.color}`,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:14,color:c.color,flexShrink:0}}>{c.id}</div>
+              <div>
+                <div style={{fontWeight:700,fontSize:15}}>{c.name}</div>
+                <div style={{fontSize:13,color:C.text2}}>{c.title}</div>
+                <div style={{fontSize:11,color:C.text3,marginTop:2}}>{c.exp} experience</div>
+              </div>
+            </div>
+            <div style={{display:'flex',gap:24,marginBottom:14}}>
+              <div><div style={{fontSize:20,fontWeight:700}}>{c.members}</div><div style={{fontSize:11,color:C.text3}}>Members</div></div>
+              <div><div style={{fontSize:20,fontWeight:700,color:C.green}}>{c.retention}%</div><div style={{fontSize:11,color:C.text3}}>Retention</div></div>
+              <div><div style={{fontSize:20,fontWeight:700,color:c.color}}>{c.utilization}%</div><div style={{fontSize:11,color:C.text3}}>Utilization</div></div>
+            </div>
+            <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:active===c.id?14:0}}>
+              {c.tags.map(t=><span key={t} style={{fontSize:11,background:C.elev,color:C.text2,padding:'3px 8px',borderRadius:4}}>{t}</span>)}
+            </div>
+            {active===c.id&&(
+              <div>
+                <div style={{fontSize:13,color:C.text2,lineHeight:1.7,borderTop:`1px solid ${C.border}`,paddingTop:14,marginBottom:14}}>{c.bio}</div>
+                <button style={{...btn(c.color),width:'100%',fontSize:13}} onClick={(e)=>{e.stopPropagation();goTo('join');}}>Train with {c.name.split(' ')[1]}</button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ClassesPage(){
+  const [booked,setBooked]=useState({});
+  const [modal,setModal]=useState(null);
+  return(
+    <div style={sec}>
+      <span style={lbl}>Schedule</span>
+      <h1 style={h1s}>Class Schedule</h1>
+      <p style={{color:C.text2,marginBottom:32,fontSize:14}}>Classes run Mon/Wed/Fri and Tue/Thu/Sat. Book in advance — Evening HIIT fills every week.</p>
+      <div style={{display:'flex',flexDirection:'column',gap:10}}>
+        {CLASSES.map(cls=>{
+          const full=cls.booked>=cls.cap;
+          const isBooked=booked[cls.name];
+          const pct=Math.round((cls.booked/cls.cap)*100);
+          return(
+            <div key={cls.name} style={{...card,display:'flex',alignItems:'center',gap:18}}>
+              <div style={{minWidth:72,textAlign:'center',background:C.elev,borderRadius:8,padding:'8px 10px'}}>
+                <div style={{fontWeight:700,fontSize:14}}>{cls.time}</div>
+                <div style={{fontSize:10,color:C.text3}}>{cls.days}</div>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontWeight:600,fontSize:14}}>{cls.name}</div>
+                <div style={{fontSize:12,color:C.text2}}>{cls.coach}</div>
+              </div>
+              <div style={{minWidth:110}}>
+                <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:C.text2,marginBottom:4}}>
+                  <span>{cls.booked}/{cls.cap}</span>
+                  <span style={{color:full?C.red:C.text3}}>{full?'FULL':`${100-pct}% open`}</span>
+                </div>
+                <div style={{height:3,background:C.elev,borderRadius:2}}>
+                  <div style={{height:'100%',background:full?C.red:C.green,borderRadius:2,width:`${Math.min(pct+(isBooked?8:0),100)}%`}}/>
+                </div>
+              </div>
+              <button style={{...btn(isBooked?C.green:full?C.borderBright:C.red),fontSize:12,padding:'7px 14px',minWidth:70}} onClick={()=>{if(!full)setBooked(b=>({...b,[cls.name]:!b[cls.name]}));else setModal(cls.name);}}>
+                {isBooked?'Booked':full?'Waitlist':'Book'}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+      {modal&&(
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.75)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:200}} onClick={()=>setModal(null)}>
+          <div style={{...card,maxWidth:360,width:'90%'}} onClick={e=>e.stopPropagation()}>
+            <div style={{fontWeight:700,marginBottom:8}}>{modal} — Waitlist</div>
+            <div style={{fontSize:13,color:C.text2,marginBottom:16}}>This class is full. Leave your name and we will notify you if a spot opens.</div>
+            <input placeholder="Your name" style={{marginBottom:10}}/>
+            <input placeholder="Phone number" style={{marginBottom:14}}/>
+            <button style={{...btn(),width:'100%',fontSize:13}} onClick={()=>setModal(null)}>Join Waitlist</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TransformationsPage({goTo}){
+  const transforms=[
+    {name:'Maria Santos',duration:'3 months',result:'Lost 6kg · Gained muscle definition',coach:'Coach Ana',plan:'Regular Monthly'},
+    {name:'Carlo Reyes',duration:'6 months',result:'Squat 1RM: 60kg to 100kg',coach:'Coach Jun',plan:'Annual'},
+    {name:'Jennica Aquino',duration:'2 months',result:'Body fat: 28% to 22%',coach:'Coach Ana',plan:'Student Monthly'},
+    {name:'Jason Bautista',duration:'5 months',result:'Lost 11kg · Runs 5km without stopping',coach:'Coach Jun',plan:'Annual'},
+    {name:'Andrea Dela Cruz',duration:'4 months',result:'First muscle-up achieved',coach:'Coach Paolo',plan:'Student Monthly'},
+    {name:'Liza Torres',duration:'3 months',result:'Resting heart rate: 92 to 68 bpm',coach:'Coach Rica',plan:'Regular Monthly'},
+  ];
+  return(
+    <div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:0,height:280,overflow:'hidden',marginBottom:0}}>
+        <img src={PHOTOS.gymFloor} alt="Iron Tribe members training" style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center',display:'block'}}/>
+        <img src={PHOTOS.portrait1} alt="Iron Tribe coaching session" style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
+      </div>
+    <div style={sec}>
+      <span style={lbl}>Results</span>
+      <h1 style={h1s}>Member Transformations</h1>
+      <p style={{color:C.text2,marginBottom:36,fontSize:14}}>Real members. Real coaches. Real results. No filters — just consistent training and accountability.</p>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:14}}>
+        {transforms.map(t=>(
+          <div key={t.name} style={card}>
+            <div style={{width:52,height:52,borderRadius:'50%',background:C.redDim,border:`1px solid ${C.red}`,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,color:C.red,fontSize:14,marginBottom:14}}>{t.name.split(' ').map(n=>n[0]).join('')}</div>
+            <div style={{fontWeight:700,fontSize:14,marginBottom:4}}>{t.name}</div>
+            <div style={{fontSize:12,color:C.text3,marginBottom:10}}>{t.duration} · {t.coach}</div>
+            <div style={{fontSize:14,color:C.green,fontWeight:600,marginBottom:12}}>{t.result}</div>
+            <div style={{...bdg(C.text3),fontSize:10,display:'inline-block'}}>{t.plan}</div>
+          </div>
+        ))}
+        <div style={{...card,border:`2px dashed ${C.border}`,display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:12,cursor:'pointer',minHeight:180}} onClick={()=>goTo('join')}>
+          <div style={{fontWeight:600,fontSize:14}}>Start Your Story</div>
+          <div style={{fontSize:12,color:C.text2,textAlign:'center'}}>Book a free assessment and begin your transformation</div>
+        </div>
+      </div>
+    </div>
+    </div>
+  );
+}
+
+function AboutPage({goTo}){
+  return(
+    <div>
+      <div style={{width:'100%',height:360,overflow:'hidden',position:'relative',marginBottom:0}}>
+        <img src={PHOTOS.gymWide} alt="Iron Tribe Fitness Gym" style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center 40%',display:'block'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom, rgba(7,7,9,0.2), rgba(7,7,9,0.7))'}}/>
+        <div style={{position:'absolute',bottom:28,left:28}}>
+          <span style={{...lbl,marginBottom:4}}>Our Story</span>
+          <h1 style={{...DISPLAY,fontSize:48,color:'#fff'}}>About Iron Tribe</h1>
+        </div>
+      </div>
+    <div style={sec}>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:28,marginBottom:36}}>
+        <div>
+          <p style={{color:C.text2,fontSize:14,lineHeight:1.8,marginBottom:16}}>Iron Tribe Fitness Gym was built for the people of Malvar, Batangas. We saw a community full of people who wanted to train seriously — but had nowhere to go that took their goals as seriously as they did.</p>
+          <p style={{color:C.text2,fontSize:14,lineHeight:1.8}}>So we built it. A coaching-led gym where every member gets a dedicated coach, a structured program, and a community that holds them accountable. No confusion. No guesswork. Just training that works.</p>
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:14}}>
+          {[['Location','4F Noli Rose Bldg, 474 J.P. Laurel Hwy\nPoblacion, Malvar, Batangas 4233'],
+            ['Hours','Monday–Sunday · 8:00 AM – 10:00 PM'],
+            ['Contact','+63 956 700 7785'],
+            ['Social','Facebook & Instagram: @irontribefitnessgym'],
+          ].map(([label,value])=>(
+            <div key={label}>
+              <div style={{fontWeight:600,fontSize:13,marginBottom:2}}>{label}</div>
+              <div style={{fontSize:13,color:C.text2,whiteSpace:'pre-line'}}>{value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:14,marginBottom:40}}>
+        {[['Coaching-First','Every member gets a dedicated coach from day one. Not a number — a person with a plan.'],
+          ['Evidence-Based','Programs built on what actually works. No fads. No guesswork. Progressive, systematic training.'],
+          ['Community','Iron Tribe members stay because of the community. 94% retention — well above industry average.'],
+        ].map(([title,desc])=>(
+          <div key={title} style={card}>
+            <div style={{fontWeight:700,marginBottom:8}}>{title}</div>
+            <div style={{fontSize:13,color:C.text2,lineHeight:1.6}}>{desc}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{textAlign:'center'}}>
+        <button style={{...btn(),padding:'13px 28px',fontSize:14}} onClick={()=>goTo('join')}>Start with a Free Assessment</button>
+      </div>
+    </div>
+    </div>
+  );
+}
+
+function ContactPage(){
+  const [sent,setSent]=useState(false);
+  return(
+    <div style={sec}>
+      <span style={lbl}>Reach Us</span>
+      <h1 style={h1s}>Contact</h1>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:28}}>
+        <div>
+          {[['Visit Us','4F Noli Rose Bldg, 474 J.P. Laurel Highway\nPoblacion, Malvar, Batangas 4233'],
+            ['Call or Text','+63 956 700 7785\nAvailable during business hours'],
+            ['Business Hours','Monday – Sunday\n8:00 AM – 10:00 PM daily'],
+            ['Social Media','Facebook: Iron-Tribe Fitness Gym\nInstagram: @irontribefitnessgym'],
+          ].map(([label,value])=>(
+            <div key={label} style={{marginBottom:20}}>
+              <div style={{fontWeight:600,marginBottom:4,fontSize:13}}>{label}</div>
+              <div style={{fontSize:13,color:C.text2,whiteSpace:'pre-line'}}>{value}</div>
+            </div>
+          ))}
+        </div>
+        <div style={card}>
+          {sent?(
+            <div style={{textAlign:'center',padding:'24px 0'}}>
+              <div style={{fontSize:36,marginBottom:12}}>✅</div>
+              <div style={{fontWeight:700,marginBottom:8}}>Message Sent!</div>
+              <div style={{fontSize:13,color:C.text2}}>We will reply within 24 hours.</div>
+            </div>
+          ):(
+            <div>
+              <div style={{fontWeight:600,marginBottom:16}}>Send a Message</div>
+              {[['Full Name','Juan Dela Cruz'],['Phone Number','+63 9XX XXX XXXX'],['Email Address','email@example.com']].map(([f,p])=>(
+                <div key={f} style={{marginBottom:12}}><div style={{fontSize:12,color:C.text2,marginBottom:6}}>{f}</div><input placeholder={p}/></div>
+              ))}
+              <div style={{marginBottom:16}}><div style={{fontSize:12,color:C.text2,marginBottom:6}}>Message</div><textarea placeholder="Ask about membership, classes, or anything else..."/></div>
+              <button style={{...btn(),width:'100%',fontSize:13}} onClick={()=>setSent(true)}>Send Message</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function JoinPage({goTo}){
+  const [step,setStep]=useState(0);
+  const [path,setPath]=useState('assessment');
+  const [plan,setPlan]=useState('regular');
+  const [pay,setPay]=useState('gcash');
+  const steps=['Path','Plan','Add-ons','Info','Payment','Confirm'];
+  const PLAN_INFO={student:{label:'Student Monthly',price:799},regular:{label:'Regular Monthly',price:999},annual:{label:'Annual Regular',price:8000}};
+  const cp=PLAN_INFO[plan]||PLAN_INFO.regular;
+  if(step>=6)return(
+    <div style={{...sec,textAlign:'center',paddingTop:80}}>
+      <div style={{fontSize:52,marginBottom:16}}>🎉</div>
+      <h2 style={{...DISPLAY,fontSize:40,marginBottom:12}}>Welcome to Iron Tribe!</h2>
+      <p style={{color:C.text2,marginBottom:24,fontSize:14}}>Assessment booked. Your coach will reach out within 24 hours. Check your phone for a confirmation message.</p>
+      <button style={btn()} onClick={()=>{setStep(0);goTo('home');}}>Back to Home</button>
+    </div>
+  );
+  const R=({val,current,set,children})=>(
+    <div onClick={()=>set(val)} style={{border:`2px solid ${current===val?C.red:C.border}`,borderRadius:8,padding:'12px 14px',marginBottom:10,cursor:'pointer',userSelect:'none'}}>{children}</div>
+  );
+  return(
+    <div style={{maxWidth:560,margin:'0 auto',padding:'52px 28px'}}>
+      <span style={lbl}>Join</span>
+      <h1 style={{...h1s,marginBottom:28}}>Get Started</h1>
+      <div style={{display:'flex',gap:6,marginBottom:32,alignItems:'center'}}>
+        {steps.map((st,i)=>(
+          <React.Fragment key={st}>
+            <div style={{width:26,height:26,borderRadius:'50%',background:i===step?C.red:i<step?C.green:C.elev,display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:700,color:i<=step?'#fff':C.text3,flexShrink:0}}>{i<step?'✓':i+1}</div>
+            {i<steps.length-1&&<div style={{flex:1,height:1,background:i<step?C.green:C.border,minWidth:10}}/>}
+          </React.Fragment>
+        ))}
+      </div>
+      <div style={{...card,marginBottom:20}}>
+        {step===0&&<div>
+          <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>How would you like to start?</div>
+          <R val="assessment" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Free Body Assessment</div><div style={{fontSize:12,color:C.text2}}>Full body comp scan + coach consult — no commitment</div></R>
+          <R val="monthly" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Monthly Membership</div><div style={{fontSize:12,color:C.text2}}>Start training immediately with full gym access</div></R>
+          <R val="annual" current={path} set={setPath}><div style={{fontWeight:600,fontSize:14}}>Annual Membership</div><div style={{fontSize:12,color:C.text2}}>Best value · Save $63.96 · Commit to your year</div></R>
+        </div>}
+        {step===1&&<div>
+          <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>Select your plan</div>
+          <R val="student" current={plan} set={setPlan}><div style={{fontWeight:600,fontSize:14}}>Student — $12.82/mo</div><div style={{fontSize:12,color:C.text2}}>Valid student ID required · All base benefits included</div></R>
+          <R val="regular" current={plan} set={setPlan}><div style={{fontWeight:600,fontSize:14}}>Regular — $16.02/mo</div><div style={{fontSize:12,color:C.text2}}>Most popular · Priority class booking included</div></R>
+          <R val="annual" current={plan} set={setPlan}><div style={{fontWeight:600,fontSize:14}}>Annual — $128/yr</div><div style={{fontSize:12,color:C.text2}}>Best value · 2x free body comp scans included</div></R>
+        </div>}
+        {step===2&&<div>
+          <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>Optional add-ons</div>
+          {['Extra Body Comp Review (+$3.21/mo)','Join 30-Day Transformation Challenge (Free)','Photo & Video Consent (for social media)','SMS & Messenger Reminders (Recommended)'].map(item=>(
+            <div key={item} style={{border:`1px solid ${C.border}`,borderRadius:8,padding:'12px 14px',marginBottom:8,fontSize:14,color:C.text2}}>{item}</div>
+          ))}
+        </div>}
+        {step===3&&<div>
+          <div style={{fontWeight:600,fontSize:15,marginBottom:16}}>Your information</div>
+          {[['Full Name','Juan Dela Cruz'],['Phone Number','+63 9XX XXX XXXX'],['Email Address','email@example.com'],['Primary Goal','e.g. Fat loss, muscle building, general fitness']].map(([f,p])=>(
+            <div key={f} style={{marginBottom:12}}><div style={{fontSize:12,color:C.text2,marginBottom:6}}>{f}</div><input placeholder={p}/></div>
+          ))}
+        </div>}
+        {step===4&&<div>
+          <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>Payment method</div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:10,marginBottom:18}}>
+            {[['gcash','GCash'],['maya','Maya'],['card','Card'],['qr','QR Ph']].map(([v,l])=>(
+              <div key={v} onClick={()=>setPay(v)} style={{border:`2px solid ${pay===v?C.red:C.border}`,borderRadius:8,padding:'14px',textAlign:'center',cursor:'pointer',fontSize:14,fontWeight:pay===v?600:400,userSelect:'none'}}>{l}</div>
+            ))}
+          </div>
+          <div style={{background:C.elev,borderRadius:8,padding:'14px 18px'}}>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:13,color:C.text2,marginBottom:6}}><span>{cp.label}</span><span>{usd(cp.price)}</span></div>
+            <div style={{display:'flex',justifyContent:'space-between',borderTop:`1px solid ${C.border}`,paddingTop:8,fontWeight:700}}><span>Total</span><span style={{color:C.red}}>{usd(cp.price)}</span></div>
+          </div>
+        </div>}
+        {step===5&&<div>
+          <div style={{fontWeight:600,fontSize:15,marginBottom:14}}>Review and confirm</div>
+          <div style={{background:C.elev,borderRadius:8,padding:'14px 18px',marginBottom:14}}>
+            {[['Plan',`${cp.label} — ${usd(cp.price)}`],['Payment',pay.charAt(0).toUpperCase()+pay.slice(1)],['Assessment','Free body comp scan · Day 1'],['Coach Assignment','Within 24 hours of signup'],['Start Date','Immediate access upon payment']].map(([k,v])=>(
+              <div key={k} style={{display:'flex',justifyContent:'space-between',padding:'5px 0',fontSize:13}}><span style={{color:C.text2}}>{k}</span><span>{v}</span></div>
+            ))}
+          </div>
+          <div style={{fontSize:11,color:C.text3}}>By confirming you accept the Membership Waiver and Privacy Policy (Philippines Data Privacy Act of 2012, R.A. 10173).</div>
+        </div>}
+      </div>
+      <div style={{display:'flex',gap:10}}>
+        {step>0&&<button style={{...btn(C.red,true),flex:1}} onClick={()=>setStep(n=>n-1)}>Back</button>}
+        <button style={{...btn(),flex:2}} onClick={()=>setStep(n=>n+1)}>{step===5?`Confirm and Pay ${usd(cp.price)}`:'Continue'}</button>
       </div>
     </div>
   );
@@ -1445,7 +2931,7 @@ function AdminSettings(){
     {label:'Membership Pricing',keys:['monthlyPlan','quarterlyPlan','annualPlan']},
     {label:'System',keys:['currency','taxRate','pinCode']},
   ];
-  const labels={gymName:'Gym Name',address:'Address',phone:'Phone',email:'Email',facebook:'Facebook URL',instagram:'Instagram URL',openTime:'Opening Time',closeTime:'Closing Time',monthlyPlan:'Monthly Plan (PHP)',quarterlyPlan:'Quarterly Plan (PHP)',annualPlan:'Annual Plan (PHP)',currency:'Currency',taxRate:'Tax Rate (decimal)',pinCode:'Operator PIN'};
+  const labels={gymName:'Gym Name',address:'Address',phone:'Phone',email:'Email',facebook:'Facebook URL',instagram:'Instagram URL',openTime:'Opening Time',closeTime:'Closing Time',monthlyPlan:'Monthly Plan (USD)',quarterlyPlan:'Quarterly Plan (USD)',annualPlan:'Annual Plan (USD)',currency:'Currency',taxRate:'Tax Rate (decimal)',pinCode:'Operator PIN'};
   return(
     <div>
       <GASNote error={error}/>
